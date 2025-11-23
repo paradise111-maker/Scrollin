@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Changing parent to a NoActionBar theme to resolve crash -->
+    <style name="Theme.Scrollin" parent="Theme.AppCompat.NoActionBar">
+        <!-- You can customize your dark theme here -->
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryDark">#1976D2</item>
+        <item name="colorAccent">#4CAF50</item>
+    </style>
+</resources>

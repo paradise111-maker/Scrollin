@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scrollin</string>
+    <string name="accessibility_service_description">Scrollin monitors app usage to help you fight doomscrolling. It blocks distracting apps during scheduled times and allows you to earn back access by completing productive activities like exercise, meditation, or task completion.</string>
+</resources>

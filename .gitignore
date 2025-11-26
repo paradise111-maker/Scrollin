@@ -1,0 +1,22 @@
+# Folders and files to ignore from Git
+
+# Built application files
+*.apk
+*.aab
+
+# Build directory
+/build
+
+# Local properties
+local.properties
+
+# IDE files
+.idea/workspace.xml
+.idea/libraries
+
+# Gradle files
+.gradle
+
+# Keystore files
+*.jks
+*.keystore

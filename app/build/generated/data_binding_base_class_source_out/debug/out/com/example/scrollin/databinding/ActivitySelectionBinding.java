@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +19,13 @@ import java.lang.String;
 
 public final class ActivitySelectionBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final LinearLayout rootView;
 
   @NonNull
   public final Button btnComplete;
 
   @NonNull
-  public final LinearLayout layoutActivities;
+  public final GridLayout gridActivities;
 
   @NonNull
   public final TextView tvTimer;
@@ -33,19 +33,18 @@ public final class ActivitySelectionBinding implements ViewBinding {
   @NonNull
   public final TextView tvTitle;
 
-  private ActivitySelectionBinding(@NonNull ScrollView rootView, @NonNull Button btnComplete,
-      @NonNull LinearLayout layoutActivities, @NonNull TextView tvTimer,
-      @NonNull TextView tvTitle) {
+  private ActivitySelectionBinding(@NonNull LinearLayout rootView, @NonNull Button btnComplete,
+      @NonNull GridLayout gridActivities, @NonNull TextView tvTimer, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnComplete = btnComplete;
-    this.layoutActivities = layoutActivities;
+    this.gridActivities = gridActivities;
     this.tvTimer = tvTimer;
     this.tvTitle = tvTitle;
   }
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public LinearLayout getRoot() {
     return rootView;
   }
 
@@ -76,9 +75,9 @@ public final class ActivitySelectionBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.layoutActivities;
-      LinearLayout layoutActivities = ViewBindings.findChildViewById(rootView, id);
-      if (layoutActivities == null) {
+      id = R.id.gridActivities;
+      GridLayout gridActivities = ViewBindings.findChildViewById(rootView, id);
+      if (gridActivities == null) {
         break missingId;
       }
 
@@ -94,7 +93,7 @@ public final class ActivitySelectionBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySelectionBinding((ScrollView) rootView, btnComplete, layoutActivities,
+      return new ActivitySelectionBinding((LinearLayout) rootView, btnComplete, gridActivities,
           tvTimer, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);

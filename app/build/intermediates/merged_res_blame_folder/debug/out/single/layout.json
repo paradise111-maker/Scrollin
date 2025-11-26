@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/activity_selection.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/activity_selection.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/block_overlay.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/block_overlay.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/activity_main.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/activity_settings.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/activity_splash.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/item_activity_button.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/item_activity_button.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-mergeDebugResources-41:/layout/item_activity_grid.xml",
+        "source": "com.example.scrollin.app-main-44:/layout/item_activity_grid.xml"
+    }
+]

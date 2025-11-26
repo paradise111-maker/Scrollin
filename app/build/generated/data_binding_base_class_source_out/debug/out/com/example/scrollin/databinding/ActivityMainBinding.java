@@ -4,8 +4,8 @@ package com.example.scrollin.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -13,52 +13,77 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.scrollin.R;
+import com.github.mikephil.charting.charts.LineChart;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ActivityMainBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final RelativeLayout rootView;
 
   @NonNull
-  public final Button btnMorningActivity;
+  public final TextView activitiesTodayTitle;
 
   @NonNull
-  public final Button btnNightActivity;
+  public final BottomNavigationView bottomNavigation;
 
   @NonNull
-  public final Button btnSettings;
+  public final LinearLayout headerLayout;
 
   @NonNull
-  public final ProgressBar progressBar;
+  public final LineChart lineChart;
 
   @NonNull
-  public final TextView tvEarnedTime;
+  public final LinearLayout morningRitualsCard;
 
   @NonNull
-  public final TextView tvPoints;
+  public final LinearLayout nightWindDownCard;
 
   @NonNull
-  public final TextView tvStatus;
+  public final ScrollView scrollView;
 
-  private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull Button btnMorningActivity,
-      @NonNull Button btnNightActivity, @NonNull Button btnSettings,
-      @NonNull ProgressBar progressBar, @NonNull TextView tvEarnedTime, @NonNull TextView tvPoints,
-      @NonNull TextView tvStatus) {
+  @NonNull
+  public final TextView tvGreeting;
+
+  @NonNull
+  public final TextView tvGreetingSubtitle;
+
+  @NonNull
+  public final TextView tvStreak;
+
+  @NonNull
+  public final TextView tvWeekendTime;
+
+  @NonNull
+  public final TextView tvWeeklyPoints;
+
+  private ActivityMainBinding(@NonNull RelativeLayout rootView,
+      @NonNull TextView activitiesTodayTitle, @NonNull BottomNavigationView bottomNavigation,
+      @NonNull LinearLayout headerLayout, @NonNull LineChart lineChart,
+      @NonNull LinearLayout morningRitualsCard, @NonNull LinearLayout nightWindDownCard,
+      @NonNull ScrollView scrollView, @NonNull TextView tvGreeting,
+      @NonNull TextView tvGreetingSubtitle, @NonNull TextView tvStreak,
+      @NonNull TextView tvWeekendTime, @NonNull TextView tvWeeklyPoints) {
     this.rootView = rootView;
-    this.btnMorningActivity = btnMorningActivity;
-    this.btnNightActivity = btnNightActivity;
-    this.btnSettings = btnSettings;
-    this.progressBar = progressBar;
-    this.tvEarnedTime = tvEarnedTime;
-    this.tvPoints = tvPoints;
-    this.tvStatus = tvStatus;
+    this.activitiesTodayTitle = activitiesTodayTitle;
+    this.bottomNavigation = bottomNavigation;
+    this.headerLayout = headerLayout;
+    this.lineChart = lineChart;
+    this.morningRitualsCard = morningRitualsCard;
+    this.nightWindDownCard = nightWindDownCard;
+    this.scrollView = scrollView;
+    this.tvGreeting = tvGreeting;
+    this.tvGreetingSubtitle = tvGreetingSubtitle;
+    this.tvStreak = tvStreak;
+    this.tvWeekendTime = tvWeekendTime;
+    this.tvWeeklyPoints = tvWeeklyPoints;
   }
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public RelativeLayout getRoot() {
     return rootView;
   }
 
@@ -83,50 +108,81 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btnMorningActivity;
-      Button btnMorningActivity = ViewBindings.findChildViewById(rootView, id);
-      if (btnMorningActivity == null) {
+      id = R.id.activities_today_title;
+      TextView activitiesTodayTitle = ViewBindings.findChildViewById(rootView, id);
+      if (activitiesTodayTitle == null) {
         break missingId;
       }
 
-      id = R.id.btnNightActivity;
-      Button btnNightActivity = ViewBindings.findChildViewById(rootView, id);
-      if (btnNightActivity == null) {
+      id = R.id.bottomNavigation;
+      BottomNavigationView bottomNavigation = ViewBindings.findChildViewById(rootView, id);
+      if (bottomNavigation == null) {
         break missingId;
       }
 
-      id = R.id.btnSettings;
-      Button btnSettings = ViewBindings.findChildViewById(rootView, id);
-      if (btnSettings == null) {
+      id = R.id.headerLayout;
+      LinearLayout headerLayout = ViewBindings.findChildViewById(rootView, id);
+      if (headerLayout == null) {
         break missingId;
       }
 
-      id = R.id.progressBar;
-      ProgressBar progressBar = ViewBindings.findChildViewById(rootView, id);
-      if (progressBar == null) {
+      id = R.id.lineChart;
+      LineChart lineChart = ViewBindings.findChildViewById(rootView, id);
+      if (lineChart == null) {
         break missingId;
       }
 
-      id = R.id.tvEarnedTime;
-      TextView tvEarnedTime = ViewBindings.findChildViewById(rootView, id);
-      if (tvEarnedTime == null) {
+      id = R.id.morning_rituals_card;
+      LinearLayout morningRitualsCard = ViewBindings.findChildViewById(rootView, id);
+      if (morningRitualsCard == null) {
         break missingId;
       }
 
-      id = R.id.tvPoints;
-      TextView tvPoints = ViewBindings.findChildViewById(rootView, id);
-      if (tvPoints == null) {
+      id = R.id.night_wind_down_card;
+      LinearLayout nightWindDownCard = ViewBindings.findChildViewById(rootView, id);
+      if (nightWindDownCard == null) {
         break missingId;
       }
 
-      id = R.id.tvStatus;
-      TextView tvStatus = ViewBindings.findChildViewById(rootView, id);
-      if (tvStatus == null) {
+      id = R.id.scrollView;
+      ScrollView scrollView = ViewBindings.findChildViewById(rootView, id);
+      if (scrollView == null) {
         break missingId;
       }
 
-      return new ActivityMainBinding((ScrollView) rootView, btnMorningActivity, btnNightActivity,
-          btnSettings, progressBar, tvEarnedTime, tvPoints, tvStatus);
+      id = R.id.tvGreeting;
+      TextView tvGreeting = ViewBindings.findChildViewById(rootView, id);
+      if (tvGreeting == null) {
+        break missingId;
+      }
+
+      id = R.id.tvGreetingSubtitle;
+      TextView tvGreetingSubtitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvGreetingSubtitle == null) {
+        break missingId;
+      }
+
+      id = R.id.tvStreak;
+      TextView tvStreak = ViewBindings.findChildViewById(rootView, id);
+      if (tvStreak == null) {
+        break missingId;
+      }
+
+      id = R.id.tvWeekendTime;
+      TextView tvWeekendTime = ViewBindings.findChildViewById(rootView, id);
+      if (tvWeekendTime == null) {
+        break missingId;
+      }
+
+      id = R.id.tvWeeklyPoints;
+      TextView tvWeeklyPoints = ViewBindings.findChildViewById(rootView, id);
+      if (tvWeeklyPoints == null) {
+        break missingId;
+      }
+
+      return new ActivityMainBinding((RelativeLayout) rootView, activitiesTodayTitle,
+          bottomNavigation, headerLayout, lineChart, morningRitualsCard, nightWindDownCard,
+          scrollView, tvGreeting, tvGreetingSubtitle, tvStreak, tvWeekendTime, tvWeeklyPoints);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

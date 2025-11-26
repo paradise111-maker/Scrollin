@@ -32,6 +32,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final Button btnSave;
 
   @NonNull
+  public final EditText etName;
+
+  @NonNull
   public final EditText etWakeTime;
 
   @NonNull
@@ -44,13 +47,14 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView tvStats;
 
   private ActivitySettingsBinding(@NonNull ScrollView rootView, @NonNull Button btnAccessibility,
-      @NonNull Button btnResetStats, @NonNull Button btnSave, @NonNull EditText etWakeTime,
-      @NonNull Switch switchMorningBlock, @NonNull Switch switchNightBlock,
-      @NonNull TextView tvStats) {
+      @NonNull Button btnResetStats, @NonNull Button btnSave, @NonNull EditText etName,
+      @NonNull EditText etWakeTime, @NonNull Switch switchMorningBlock,
+      @NonNull Switch switchNightBlock, @NonNull TextView tvStats) {
     this.rootView = rootView;
     this.btnAccessibility = btnAccessibility;
     this.btnResetStats = btnResetStats;
     this.btnSave = btnSave;
+    this.etName = etName;
     this.etWakeTime = etWakeTime;
     this.switchMorningBlock = switchMorningBlock;
     this.switchNightBlock = switchNightBlock;
@@ -102,6 +106,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.etName;
+      EditText etName = ViewBindings.findChildViewById(rootView, id);
+      if (etName == null) {
+        break missingId;
+      }
+
       id = R.id.etWakeTime;
       EditText etWakeTime = ViewBindings.findChildViewById(rootView, id);
       if (etWakeTime == null) {
@@ -127,7 +137,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
       }
 
       return new ActivitySettingsBinding((ScrollView) rootView, btnAccessibility, btnResetStats,
-          btnSave, etWakeTime, switchMorningBlock, switchNightBlock, tvStats);
+          btnSave, etName, etWakeTime, switchMorningBlock, switchNightBlock, tvStats);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

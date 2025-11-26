@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Neon Colors for UI -->
+    <color name="neon_green">#00FF88</color>
+    <color name="neon_yellow">#FFD60A</color>
+    <color name="neon_purple">#A16EFF</color>
+    <color name="neon_blue">#00D4FF</color>
+
+    <!-- New Text and Background Colors -->
+    <color name="background_dark">#0A0A0A</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
 </resources>

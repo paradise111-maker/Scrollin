@@ -58,7 +58,7 @@ class DoomscrollAccessibilityService : AccessibilityService() {
         val isInNightBlock = hour in 19..23
 
         // Check if user has earned minutes
-        val hasEarnedTime = pointsManager.getEarnedMinutes() > 0
+        val hasEarnedTime = pointsManager.getAvailableWeekendMinutes() > 0
 
         return ((morningBlockEnabled && isInMorningBlock) ||
                 (nightBlockEnabled && isInNightBlock)) && !hasEarnedTime
@@ -87,7 +87,7 @@ class DoomscrollAccessibilityService : AccessibilityService() {
         val btnEarnTime = overlayView?.findViewById<Button>(R.id.btnEarnTime)
 
         val appName = getAppName(appPackage)
-        val earnedMinutes = pointsManager.getEarnedMinutes()
+        val earnedMinutes = pointsManager.getAvailableWeekendMinutes()
 
         tvMessage?.text = "🚫 $appName is blocked during this time"
         tvEarnedTime?.text = "You have $earnedMinutes minutes of earned time"

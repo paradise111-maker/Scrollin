@@ -9,6 +9,7 @@ import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
@@ -73,14 +74,14 @@ class ActivitySelectionActivity : AppCompatActivity() {
             }
             "NIGHT" -> {
                 tvTitle.text = "🌙 Night Activities"
-                addActivityToGrid("🧘‍♂️", "Meditation", "3 minutes | 10 pts", "MEDITATION", 0, false)
+                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
                 addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "TIMER", 15, false)
                 addActivityToGrid("📝", "Journaling", "5 minutes | 10 pts", "TIMER", 10, false)
                 addActivityToGrid("👥", "Socialize", "Call a friend | 20 pts", "TIMER", 20, false)
             }
             else -> {
                 tvTitle.text = "✨ Anytime Activities"
-                 addActivityToGrid("🧘‍♂️", "Meditation", "3 minutes | 10 pts", "MEDITATION", 0, false)
+                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
                 addActivityToGrid("💪", "Quick Exercise", "5 reps | 5 pts", "PUSHUPS", 5, true)
                 addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "TIMER", 15, false)
             }
@@ -122,6 +123,11 @@ class ActivitySelectionActivity : AppCompatActivity() {
             return
         }
 
+        if (exercise == "MEDITATION") {
+            showMeditationDialog()
+            return
+        }
+
         selectedActivityPoints = points
         
         if (requiresCamera) {
@@ -136,16 +142,31 @@ class ActivitySelectionActivity : AppCompatActivity() {
         }
     }
 
-    private fun startTimerActivity(title: String, points: Int) {
+    private fun showMeditationDialog() {
+        val meditationOptions = arrayOf("5 minutes (10 points)", "10 minutes (20 points)", "15 minutes (30 points)", "30 minutes (40 points)")
+        val durations = arrayOf(300L, 600L, 900L, 1800L)
+        val points = arrayOf(10, 20, 30, 40)
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose Meditation Time")
+            .setItems(meditationOptions) { _, which ->
+                startTimerActivity("Meditation", points[which], durations[which])
+            }
+            .show()
+    }
+
+    private fun startTimerActivity(title: String, points: Int, duration: Long? = null) {
         isActivityRunning = true
         isActivityCompleted = false
 
-        val durationSeconds = when {
+        val durationSeconds = duration ?: when {
             title.contains("3 minutes") -> 180L
             title.contains("5 minutes") -> 300L
             title.contains("10 minutes") -> 600L
             else -> 120L // Default to 2 minutes
         }
+        
+        selectedActivityPoints = points
 
         tvTimer.text = "Activity: $title\nTime remaining: ${formatTime(durationSeconds)}"
         btnComplete.isEnabled = false

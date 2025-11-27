@@ -11471,7 +11471,7 @@
         <item name="colorPrimary">#2196F3</item>
         <item name="colorPrimaryDark">#1976D2</item>
         <item name="colorAccent">#4CAF50</item>
-    </style></file><file path="/Users/bhavyamaheshwari/StudioProjects/Scrollin/app/src/main/res/values/colors.xml" qualifiers=""><color name="black">#FF000000</color><color name="white">#FFFFFFFF</color><color name="neon_green">#00FF88</color><color name="neon_yellow">#FFD60A</color><color name="neon_purple">#A16EFF</color><color name="neon_blue">#00D4FF</color><color name="background_dark">#0A0A0A</color><color name="text_primary">#FFFFFF</color><color name="text_secondary">#B0B0B0</color></file><file path="/Users/bhavyamaheshwari/StudioProjects/Scrollin/app/src/main/res/values/themes.xml" qualifiers=""><style name="Theme.Scrollin" parent="Theme.AppCompat.Light.NoActionBar">
+    </style></file><file path="/Users/bhavyamaheshwari/StudioProjects/Scrollin/app/src/main/res/values/colors.xml" qualifiers=""><color name="black">#FF000000</color><color name="white">#FFFFFFFF</color><color name="neon_green">#00FF88</color><color name="neon_yellow">#FFD60A</color><color name="neon_purple">#A16EFF</color><color name="neon_blue">#00D4FF</color><color name="background_dark">#0A0A0A</color><color name="text_primary">#FFFFFF</color><color name="text_secondary">#B0B0B0</color><color name="neon_green_light">#90E8C0</color></file><file path="/Users/bhavyamaheshwari/StudioProjects/Scrollin/app/src/main/res/values/themes.xml" qualifiers=""><style name="Theme.Scrollin" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#2196F3</item>
         <item name="colorPrimaryDark">#1976D2</item>
         <item name="colorAccent">#4CAF50</item>

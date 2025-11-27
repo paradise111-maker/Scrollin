@@ -40,15 +40,48 @@ class CameraActivity : AppCompatActivity() {
     private var activityName = ""
     private var points = 0
 
-    // Exercise state tracking - IMPROVED
+    // ====== OPTIMIZED STATE TRACKING ======
     private var isInDownPosition = false
-    private var lastRepTime = 0L  // NEW: Prevent rapid counting
-    private val MIN_REP_INTERVAL = 800L  // NEW: Minimum 800ms between reps
+    private var lastRepTime = 0L
+    private val MIN_REP_INTERVAL = 600L  // Reduced to 600ms for faster exercises
 
-    // Stability checks - NEW
-    private var consecutiveDownFrames = 0  // NEW: Must be down for multiple frames
-    private var consecutiveUpFrames = 0    // NEW: Must be up for multiple frames
-    private val REQUIRED_STABLE_FRAMES = 3 // NEW: Need 3 frames to confirm position
+    // Hysteresis thresholds - Critical for accuracy
+    private val DOWN_THRESHOLD = mutableMapOf(
+        "PUSHUPS" to 85.0,      // Elbow angle < 85° = DOWN
+        "SQUATS" to 105.0,      // Knee angle < 105° = DOWN
+        "JUMPING_JACKS" to 80.0 // Shoulder-wrist distance < 80 = DOWN (ARMS UP)
+    )
+
+    private val UP_THRESHOLD = mutableMapOf(
+        "PUSHUPS" to 165.0,      // Elbow angle > 165° = UP
+        "SQUATS" to 170.0,       // Knee angle > 170° = UP
+        "JUMPING_JACKS" to 220.0 // Shoulder-wrist distance > 220 = DOWN (ARMS DOWN)
+    )
+
+    // Hysteresis zones - Dead band to prevent jitter
+    private val HYSTERESIS_MARGIN = mutableMapOf(
+        "PUSHUPS" to 15.0,
+        "SQUATS" to 15.0,
+        "JUMPING_JACKS" to 30.0
+    )
+
+    // Stability counters with increased requirements
+    private var consecutiveConfirmedFrames = 0
+    private val REQUIRED_STABLE_FRAMES = 5  // Increased from 3 for better stability
+
+    // Confidence tracking
+    private val LANDMARK_CONFIDENCE_THRESHOLD = 0.5f
+    private var confidenceWarningCount = 0
+    private val MAX_CONFIDENCE_WARNINGS = 15
+
+    // Angle history for smoothing
+    private val angleHistory = mutableListOf<Double>()
+    private val MAX_HISTORY_SIZE = 5
+    private var smoothedAngle = 0.0
+
+    // Position validation
+    private var lastValidAngle = 0.0
+    private var lastValidDistance = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,44 +233,58 @@ class CameraActivity : AppCompatActivity() {
                 tvInstructions.text = "⚠️ No person detected\nStep into camera view"
                 tvInstructions.setTextColor(android.graphics.Color.RED)
             }
-            consecutiveDownFrames = 0
-            consecutiveUpFrames = 0
+            resetStabilityCounters()
             return
         }
 
-        // Check if all required landmarks are visible
+        // Check if all required landmarks are visible with GOOD CONFIDENCE
         val requiredLandmarks = when (activityType) {
             "SQUATS" -> listOf(
                 PoseLandmark.LEFT_HIP,
                 PoseLandmark.LEFT_KNEE,
-                PoseLandmark.LEFT_ANKLE
+                PoseLandmark.LEFT_ANKLE,
+                PoseLandmark.RIGHT_HIP,
+                PoseLandmark.RIGHT_KNEE,
+                PoseLandmark.RIGHT_ANKLE
             )
             "PUSHUPS" -> listOf(
                 PoseLandmark.LEFT_SHOULDER,
                 PoseLandmark.LEFT_ELBOW,
-                PoseLandmark.LEFT_WRIST
+                PoseLandmark.LEFT_WRIST,
+                PoseLandmark.RIGHT_SHOULDER,
+                PoseLandmark.RIGHT_ELBOW,
+                PoseLandmark.RIGHT_WRIST
             )
             "JUMPING_JACKS" -> listOf(
                 PoseLandmark.LEFT_SHOULDER,
                 PoseLandmark.LEFT_WRIST,
-                PoseLandmark.LEFT_HIP
+                PoseLandmark.LEFT_HIP,
+                PoseLandmark.RIGHT_SHOULDER,
+                PoseLandmark.RIGHT_WRIST,
+                PoseLandmark.RIGHT_HIP
             )
             else -> emptyList()
         }
 
-        val allLandmarksVisible = requiredLandmarks.all {
-            pose.getPoseLandmark(it) != null
+        // Validate landmarks exist AND have good confidence
+        val allLandmarksVisible = requiredLandmarks.all { landmarkId ->
+            val landmark = pose.getPoseLandmark(landmarkId)
+            landmark != null && landmark.inFrameLikelihood > LANDMARK_CONFIDENCE_THRESHOLD
         }
 
         if (!allLandmarksVisible) {
-            runOnUiThread {
-                tvInstructions.text = "⚠️ Full body not visible\nStep back so I can see you fully"
-                tvInstructions.setTextColor(android.graphics.Color.YELLOW)
+            confidenceWarningCount++
+            if (confidenceWarningCount >= MAX_CONFIDENCE_WARNINGS) {
+                runOnUiThread {
+                    tvInstructions.text = "⚠️ Full body not visible\nStep back so I can see you fully"
+                    tvInstructions.setTextColor(android.graphics.Color.YELLOW)
+                }
+                resetStabilityCounters()
+                confidenceWarningCount = 0
             }
-            consecutiveDownFrames = 0
-            consecutiveUpFrames = 0
             return
         }
+        confidenceWarningCount = 0
 
         // Process exercise detection
         when (activityType) {
@@ -247,126 +294,139 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // ====== OPTIMIZED ANGLE SMOOTHING ======
+    private fun updateAngleHistory(newAngle: Double): Double {
+        angleHistory.add(newAngle)
+        if (angleHistory.size > MAX_HISTORY_SIZE) {
+            angleHistory.removeAt(0)
+        }
+
+        // Calculate median instead of average (more robust to outliers)
+        smoothedAngle = angleHistory.sorted()[angleHistory.size / 2].toDouble()
+        return smoothedAngle
+    }
+
+    // ====== OPTIMIZED SQUAT DETECTION ======
     private fun detectSquat(pose: Pose) {
+        // Use BOTH sides for averaging
         val leftHip = pose.getPoseLandmark(PoseLandmark.LEFT_HIP) ?: return
         val leftKnee = pose.getPoseLandmark(PoseLandmark.LEFT_KNEE) ?: return
         val leftAnkle = pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE) ?: return
 
-        val kneeAngle = getAngle(
-            leftHip.position3D,
-            leftKnee.position3D,
-            leftAnkle.position3D
-        )
+        val rightHip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP) ?: return
+        val rightKnee = pose.getPoseLandmark(PoseLandmark.RIGHT_KNEE) ?: return
+        val rightAnkle = pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE) ?: return
 
-        // More strict angle thresholds
-        val isDown = kneeAngle < 110  // Stricter: was 120
-        val isUp = kneeAngle > 165    // Stricter: was 160
+        val leftKneeAngle = getAngle(leftHip.position3D, leftKnee.position3D, leftAnkle.position3D)
+        val rightKneeAngle = getAngle(rightHip.position3D, rightKnee.position3D, rightAnkle.position3D)
 
-        if (isDown) {
-            consecutiveDownFrames++
-            consecutiveUpFrames = 0
+        // Average both angles for stability
+        val avgKneeAngle = (leftKneeAngle + rightKneeAngle) / 2.0
+        val smoothedKneeAngle = updateAngleHistory(avgKneeAngle)
 
-            if (consecutiveDownFrames >= REQUIRED_STABLE_FRAMES && !isInDownPosition) {
-                isInDownPosition = true
-                runOnUiThread {
-                    tvInstructions.text = "✅ Good squat! Now stand up"
-                    tvInstructions.setTextColor(android.graphics.Color.GREEN)
-                }
-            }
-        } else if (isUp) {
-            consecutiveUpFrames++
-            consecutiveDownFrames = 0
-
-            if (consecutiveUpFrames >= REQUIRED_STABLE_FRAMES && isInDownPosition) {
-                // Check time since last rep
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastRepTime > MIN_REP_INTERVAL) {
-                    isInDownPosition = false
-                    lastRepTime = currentTime
-                    repCount++
-                    updateRepCount()
-                }
-            }
-        }
+        processPositionChange(smoothedKneeAngle, "SQUATS")
     }
 
+    // ====== OPTIMIZED PUSHUP DETECTION ======
     private fun detectPushup(pose: Pose) {
         val leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER) ?: return
         val leftElbow = pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW) ?: return
         val leftWrist = pose.getPoseLandmark(PoseLandmark.LEFT_WRIST) ?: return
 
-        val elbowAngle = getAngle(
-            leftShoulder.position3D,
-            leftElbow.position3D,
-            leftWrist.position3D
-        )
+        val rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER) ?: return
+        val rightElbow = pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW) ?: return
+        val rightWrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST) ?: return
 
-        // Stricter angle thresholds
-        val isDown = elbowAngle < 90   // Stricter: was 100
-        val isUp = elbowAngle > 165    // Stricter: was 160
+        val leftElbowAngle = getAngle(leftShoulder.position3D, leftElbow.position3D, leftWrist.position3D)
+        val rightElbowAngle = getAngle(rightShoulder.position3D, rightElbow.position3D, rightWrist.position3D)
 
-        if (isDown) {
-            consecutiveDownFrames++
-            consecutiveUpFrames = 0
+        // Average both angles for stability
+        val avgElbowAngle = (leftElbowAngle + rightElbowAngle) / 2.0
+        val smoothedElbowAngle = updateAngleHistory(avgElbowAngle)
 
-            if (consecutiveDownFrames >= REQUIRED_STABLE_FRAMES && !isInDownPosition) {
-                isInDownPosition = true
-                runOnUiThread {
-                    tvInstructions.text = "✅ Good form! Now push up"
-                    tvInstructions.setTextColor(android.graphics.Color.GREEN)
+        processPositionChange(smoothedElbowAngle, "PUSHUPS")
+    }
+
+    // ====== OPTIMIZED JUMPING JACK DETECTION ======
+    private fun detectJumpingJack(pose: Pose) {
+        val leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER) ?: return
+        val leftWrist = pose.getPoseLandmark(PoseLandmark.LEFT_WRIST) ?: return
+
+        val rightShoulder = pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER) ?: return
+        val rightWrist = pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST) ?: return
+
+        val leftDistance = abs(leftShoulder.position3D.y - leftWrist.position3D.y)
+        val rightDistance = abs(rightShoulder.position3D.y - rightWrist.position3D.y)
+
+        val avgDistance = (leftDistance + rightDistance) / 2.0
+
+        processPositionChange(avgDistance, "JUMPING_JACKS")
+    }
+
+    // ====== CORE LOGIC: HYSTERESIS-BASED STATE MACHINE ======
+    private fun processPositionChange(measurement: Double, exercise: String) {
+        val downThresh = DOWN_THRESHOLD[exercise] ?: 90.0
+        val upThresh = UP_THRESHOLD[exercise] ?: 170.0
+        val hysteresis = HYSTERESIS_MARGIN[exercise] ?: 15.0
+
+        val isDown: Boolean
+        val isUp: Boolean
+
+        if (!isInDownPosition) {
+            // Currently in UP position - looking for DOWN
+            isDown = measurement < downThresh
+            isUp = false
+        } else {
+            // Currently in DOWN position - looking for UP
+            isDown = false
+            isUp = measurement > upThresh
+        }
+
+        // Log for debugging
+        Log.d("ExerciseDetection", "$exercise | Measurement: $measurement | Down: $isDown | Up: $isUp | State: ${if (isInDownPosition) "DOWN" else "UP"}")
+
+        when {
+            isDown -> {
+                consecutiveConfirmedFrames++
+
+                if (consecutiveConfirmedFrames >= REQUIRED_STABLE_FRAMES && !isInDownPosition) {
+                    isInDownPosition = true
+                    angleHistory.clear()
+                    runOnUiThread {
+                        tvInstructions.text = "✅ Good form! Now complete the rep"
+                        tvInstructions.setTextColor(android.graphics.Color.GREEN)
+                    }
                 }
             }
-        } else if (isUp) {
-            consecutiveUpFrames++
-            consecutiveDownFrames = 0
 
-            if (consecutiveUpFrames >= REQUIRED_STABLE_FRAMES && isInDownPosition) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastRepTime > MIN_REP_INTERVAL) {
-                    isInDownPosition = false
-                    lastRepTime = currentTime
-                    repCount++
-                    updateRepCount()
+            isUp -> {
+                consecutiveConfirmedFrames++
+
+                if (consecutiveConfirmedFrames >= REQUIRED_STABLE_FRAMES && isInDownPosition) {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastRepTime > MIN_REP_INTERVAL) {
+                        isInDownPosition = false
+                        lastRepTime = currentTime
+                        repCount++
+                        consecutiveConfirmedFrames = 0
+                        angleHistory.clear()
+                        updateRepCount()
+                    }
+                }
+            }
+
+            else -> {
+                // In hysteresis zone - keep counter but don't count
+                if (consecutiveConfirmedFrames > 0) {
+                    consecutiveConfirmedFrames--
                 }
             }
         }
     }
 
-    private fun detectJumpingJack(pose: Pose) {
-        val leftShoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER) ?: return
-        val leftWrist = pose.getPoseLandmark(PoseLandmark.LEFT_WRIST) ?: return
-
-        val shoulderWristDistance = abs(leftShoulder.position3D.y - leftWrist.position3D.y)
-
-        // Stricter thresholds
-        val isArmsUp = shoulderWristDistance < 80    // Stricter: was 100
-        val isArmsDown = shoulderWristDistance > 220 // Stricter: was 200
-
-        if (isArmsUp) {
-            consecutiveUpFrames++
-            consecutiveDownFrames = 0
-
-            if (consecutiveUpFrames >= REQUIRED_STABLE_FRAMES && !isInDownPosition) {
-                isInDownPosition = true
-                runOnUiThread {
-                    tvInstructions.text = "✅ Arms up! Now bring them down"
-                    tvInstructions.setTextColor(android.graphics.Color.GREEN)
-                }
-            }
-        } else if (isArmsDown) {
-            consecutiveDownFrames++
-            consecutiveUpFrames = 0
-
-            if (consecutiveDownFrames >= REQUIRED_STABLE_FRAMES && isInDownPosition) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastRepTime > MIN_REP_INTERVAL) {
-                    isInDownPosition = false
-                    lastRepTime = currentTime
-                    repCount++
-                    updateRepCount()
-                }
-            }
-        }
+    private fun resetStabilityCounters() {
+        consecutiveConfirmedFrames = 0
+        angleHistory.clear()
     }
 
     private fun getAngle(
@@ -376,7 +436,7 @@ class CameraActivity : AppCompatActivity() {
     ): Double {
         var result = Math.toDegrees(
             atan2((lastPoint.y - midPoint.y).toDouble(), (lastPoint.x - midPoint.x).toDouble()) -
-            atan2((firstPoint.y - midPoint.y).toDouble(), (firstPoint.x - midPoint.x).toDouble())
+                    atan2((firstPoint.y - midPoint.y).toDouble(), (firstPoint.x - midPoint.x).toDouble())
         )
         result = abs(result)
         if (result > 180) {

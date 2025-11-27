@@ -2095,6 +2095,7 @@ color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
 color neon_blue
 color neon_green
+color neon_green_light
 color neon_purple
 color neon_yellow
 color notification_action_color_filter

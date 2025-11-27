@@ -5,6 +5,7 @@ color black
 color bottom_nav_color
 color neon_blue
 color neon_green
+color neon_green_light
 color neon_purple
 color neon_yellow
 color text_primary

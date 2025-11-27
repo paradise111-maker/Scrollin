@@ -141,12 +141,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupChart() {
         // Get REAL data from PointsManager
         val pointsData = pointsManager.getLast7DaysPoints()
-        
+
         val entries = ArrayList<Entry>()
         for ((index, points) in pointsData.withIndex()) {
             entries.add(Entry(index.toFloat(), points.toFloat()))
         }
-        
+
         // If no data yet, show empty chart
         if (entries.all { it.y == 0f }) {
             // Add placeholder data to show chart structure
@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
             invalidate()
         }
     }
-    
+
     private fun runEntranceAnimation() {
         val viewsToAnimate = listOf(
             headerLayout,
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() {
             view.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .setStartDelay((index * 80).toLong()) 
+                .setStartDelay((index * 80).toLong())
                 .setDuration(500)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .start()
@@ -234,8 +234,8 @@ class MainActivity : AppCompatActivity() {
                 tvGreetingSubtitle.setTextColor(getColor(R.color.neon_green))
             }
             else -> {
-                tvGreetingSubtitle.text = "✅ Free Time"
-                tvGreetingSubtitle.setTextColor(getColor(R.color.neon_green))
+                tvGreetingSubtitle.text = "Unscroll Your Mind."
+                tvGreetingSubtitle.setTextColor(getColor(R.color.text_secondary))
             }
         }
     }
@@ -247,3 +247,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+

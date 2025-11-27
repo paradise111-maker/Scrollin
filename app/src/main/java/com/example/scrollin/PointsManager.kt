@@ -76,12 +76,12 @@ class PointsManager(context: Context) {
         checkAndResetWeekly()
         return prefs.getInt(KEY_WEEKLY_POINTS, 0)
     }
-    
+
     // === WEEKEND SYSTEM ===
     
     fun getAvailableWeekendMinutes(): Int {
-        if (!isWeekend()) return 0
-        
+        // if (!isWeekend()) return 0 // Temporarily commented out for testing
+
         val weeklyPoints = getWeeklyPoints()
         val baseMinutes = weeklyPoints * 2  // 1 point = 2 minutes on weekend
         val streakBonus = getStreakBonus()

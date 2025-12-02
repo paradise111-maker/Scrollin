@@ -1,6 +1,0 @@
-com.example.scrollin.test.app-jetified-annotation-experimental-1.3.1-0 /Users/bhavyamaheshwari/.gradle/caches/9.0-milestone-1/transforms/08d7192d91201f8388f97a4fa9591cb1/transformed/jetified-annotation-experimental-1.3.1/res
-com.example.scrollin.test.app-jetified-core-1.5.0-1 /Users/bhavyamaheshwari/.gradle/caches/9.0-milestone-1/transforms/346444fa45334e217cb064482b7115f9/transformed/jetified-core-1.5.0/res
-com.example.scrollin.test.app-androidTest-2 /Users/bhavyamaheshwari/StudioProjects/Scrollin/app/build/generated/res/resValues/androidTest/debug
-com.example.scrollin.test.app-mergeDebugAndroidTestResources-3 /Users/bhavyamaheshwari/StudioProjects/Scrollin/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
-com.example.scrollin.test.app-mergeDebugAndroidTestResources-4 /Users/bhavyamaheshwari/StudioProjects/Scrollin/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
-com.example.scrollin.test.app-merged_res-5 /Users/bhavyamaheshwari/StudioProjects/Scrollin/app/build/intermediates/merged_res/debugAndroidTest

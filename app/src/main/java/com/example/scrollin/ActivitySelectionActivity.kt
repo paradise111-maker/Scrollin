@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class ActivitySelectionActivity : AppCompatActivity() {
@@ -19,9 +20,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
     private lateinit var gridActivities: GridLayout
     private lateinit var tvTimer: TextView
     private lateinit var btnComplete: Button
+    private lateinit var fabAddTask: FloatingActionButton
     private lateinit var pointsManager: PointsManager
 
     private var selectedActivityPoints: Int = 0
+    private var selectedActivityType: String? = null
+    private var selectedActivityDurationMinutes: Int = 0
     private var timer: CountDownTimer? = null
     private var isActivityRunning = false
     private var isActivityCompleted = false
@@ -38,6 +42,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
         gridActivities = findViewById(R.id.gridActivities)
         tvTimer = findViewById(R.id.tvTimer)
         btnComplete = findViewById(R.id.btnComplete)
+        fabAddTask = findViewById(R.id.fabAddTask)
 
         setupActivities(activityType)
 
@@ -47,6 +52,10 @@ class ActivitySelectionActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please wait for the activity to complete!", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        fabAddTask.setOnClickListener {
+            startActivity(Intent(this, AddTaskActivity::class.java))
         }
     }
 
@@ -66,24 +75,25 @@ class ActivitySelectionActivity : AppCompatActivity() {
         when (type) {
             "MORNING" -> {
                 tvTitle.text = "🌅 Morning Activities"
+                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
                 addActivityToGrid("💪", "Push-ups", "10 reps | 10 pts", "PUSHUPS", 10, true)
                 addActivityToGrid("🦵", "Squats", "15 reps | 10 pts", "SQUATS", 15, true)
                 addActivityToGrid("🏃", "Jumping Jacks", "20 reps | 15 pts", "JUMPING_JACKS", 20, true)
-                addActivityToGrid("🧘", "Yoga", "5 minutes | 10 pts", "YOGA", 0, false) // Camera optional for Yoga
-                addActivityToGrid("✅", "Complete a Task", "Earn 5 pts", "TIMER", 5, false)
+                addActivityToGrid("🧘", "Yoga", "20-30 min | 25-35 pts", "YOGA", 0, false)
+                addActivityToGrid("✅", "Complete a Task", "Earn 5 pts", "TASK", 5, false)
             }
             "NIGHT" -> {
                 tvTitle.text = "🌙 Night Activities"
                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
-                addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "TIMER", 15, false)
-                addActivityToGrid("📝", "Journaling", "5 minutes | 10 pts", "TIMER", 10, false)
-                addActivityToGrid("👥", "Socialize", "Call a friend | 20 pts", "TIMER", 20, false)
+                addActivityToGrid("📚", "Reading", "30-60 min | 20-40 pts", "READING", 0, false)
+                addActivityToGrid("📝", "Journaling", "30-60 min | 20-40 pts", "JOURNALING", 0, false)
+                addActivityToGrid("👥", "Socialize", "30-60 min | 30-50 pts", "SOCIALIZE", 0, false)
             }
             else -> {
                 tvTitle.text = "✨ Anytime Activities"
                  addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
                 addActivityToGrid("💪", "Quick Exercise", "5 reps | 5 pts", "PUSHUPS", 5, true)
-                addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "TIMER", 15, false)
+                addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "READING", 0, false)
             }
         }
     }
@@ -123,39 +133,96 @@ class ActivitySelectionActivity : AppCompatActivity() {
             return
         }
 
-        if (exercise == "MEDITATION") {
-            showMeditationDialog()
-            return
-        }
+        this.selectedActivityType = exercise
 
-        selectedActivityPoints = points
-        
-        if (requiresCamera) {
-            val intent = Intent(this, CameraActivity::class.java)
-            intent.putExtra("ACTIVITY_TYPE", exercise)
-            intent.putExtra("TARGET_REPS", target)
-            intent.putExtra("ACTIVITY_NAME", title)
-            intent.putExtra("POINTS", points)
-            startActivityForResult(intent, 100)
-        } else {
-            startTimerActivity(title, points)
+        when (exercise) {
+            "MEDITATION" -> showMeditationDialog(exercise)
+            "YOGA" -> showYogaDialog(exercise)
+            "READING" -> showReadingDialog(exercise)
+            "JOURNALING" -> showJournalingDialog(exercise)
+            "SOCIALIZE" -> showSocializeDialog(exercise)
+            else -> {
+                selectedActivityPoints = points
+                if (requiresCamera) {
+                    val intent = Intent(this, CameraActivity::class.java)
+                    intent.putExtra("ACTIVITY_TYPE", exercise)
+                    intent.putExtra("TARGET_REPS", target)
+                    intent.putExtra("ACTIVITY_NAME", title)
+                    intent.putExtra("POINTS", points)
+                    startActivityForResult(intent, 100)
+                } else {
+                    startTimerActivity(title, points, null, exercise)
+                }
+            }
         }
     }
 
-    private fun showMeditationDialog() {
-        val meditationOptions = arrayOf("5 minutes (10 points)", "10 minutes (20 points)", "15 minutes (30 points)", "30 minutes (40 points)")
+    private fun showMeditationDialog(activityType: String) {
+        val options = arrayOf("5 minutes (10 points)", "10 minutes (20 points)", "15 minutes (30 points)", "30 minutes (40 points)")
         val durations = arrayOf(300L, 600L, 900L, 1800L)
         val points = arrayOf(10, 20, 30, 40)
 
         AlertDialog.Builder(this)
             .setTitle("Choose Meditation Time")
-            .setItems(meditationOptions) { _, which ->
-                startTimerActivity("Meditation", points[which], durations[which])
+            .setItems(options) { _, which ->
+                startTimerActivity("Meditation", points[which], durations[which], activityType)
             }
             .show()
     }
 
-    private fun startTimerActivity(title: String, points: Int, duration: Long? = null) {
+    private fun showYogaDialog(activityType: String) {
+        val options = arrayOf("20 minutes (25 points)", "30 minutes (35 points)")
+        val durations = arrayOf(1200L, 1800L)
+        val points = arrayOf(25, 35)
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose Yoga Time")
+            .setItems(options) { _, which ->
+                startTimerActivity("Yoga", points[which], durations[which], activityType)
+            }
+            .show()
+    }
+
+    private fun showReadingDialog(activityType: String) {
+        val options = arrayOf("30 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
+        val durations = arrayOf(1800L, 2700L, 3600L)
+        val points = arrayOf(20, 30, 40)
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose Reading Time")
+            .setItems(options) { _, which ->
+                startTimerActivity("Reading", points[which], durations[which], activityType)
+            }
+            .show()
+    }
+
+    private fun showJournalingDialog(activityType: String) {
+        val options = arrayOf("30 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
+        val durations = arrayOf(1800L, 2700L, 3600L)
+        val points = arrayOf(20, 30, 40)
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose Journaling Time")
+            .setItems(options) { _, which ->
+                startTimerActivity("Journaling", points[which], durations[which], activityType)
+            }
+            .show()
+    }
+
+    private fun showSocializeDialog(activityType: String) {
+        val options = arrayOf("30 minutes (30 points)", "45 minutes (40 points)", "60 minutes (50 points)")
+        val durations = arrayOf(1800L, 2700L, 3600L)
+        val points = arrayOf(30, 40, 50)
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose Socializing Time")
+            .setItems(options) { _, which ->
+                startTimerActivity("Socialize", points[which], durations[which], activityType)
+            }
+            .show()
+    }
+
+    private fun startTimerActivity(title: String, points: Int, duration: Long? = null, activityType: String) {
         isActivityRunning = true
         isActivityCompleted = false
 
@@ -167,6 +234,8 @@ class ActivitySelectionActivity : AppCompatActivity() {
         }
         
         selectedActivityPoints = points
+        selectedActivityType = activityType
+        selectedActivityDurationMinutes = (durationSeconds / 60).toInt()
 
         tvTimer.text = "Activity: $title\nTime remaining: ${formatTime(durationSeconds)}"
         btnComplete.isEnabled = false
@@ -198,7 +267,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun completeActivity() {
-        pointsManager.addPoints(selectedActivityPoints)
+        pointsManager.addPoints(selectedActivityPoints, selectedActivityType, selectedActivityDurationMinutes)
         Toast.makeText(this, "🎉 +$selectedActivityPoints points earned!", Toast.LENGTH_LONG).show()
         
         btnComplete.postDelayed({
@@ -211,7 +280,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
         
         if (requestCode == 100 && resultCode == RESULT_OK) {
             val points = data?.getIntExtra("POINTS_EARNED", 0) ?: 0
-            pointsManager.addPoints(points)
+            pointsManager.addPoints(points, selectedActivityType)
             Toast.makeText(this, "🎉 +$points points earned!", Toast.LENGTH_SHORT).show()
             finish()
         }

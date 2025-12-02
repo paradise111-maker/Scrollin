@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_cred_card"
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvPerkIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎨"
+        android:textSize="40sp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvPerkTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Theme"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvPerkDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unlock a new look"
+        android:textSize="12sp"
+        android:textColor="#B0B0B0"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnUnlockPerk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unlock (200 pts)"
+        android:background="@drawable/bg_gradient_button"/>
+
+</LinearLayout>

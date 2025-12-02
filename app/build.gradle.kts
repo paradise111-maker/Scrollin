@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -53,6 +54,12 @@ dependencies {
     implementation(libs.mlkit.face.detection)
 
     implementation(libs.mpandroidchart)
+    implementation(libs.gson)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)

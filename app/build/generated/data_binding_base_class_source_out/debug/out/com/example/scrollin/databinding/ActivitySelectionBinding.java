@@ -6,26 +6,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.scrollin.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class ActivitySelectionBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final CoordinatorLayout rootView;
 
   @NonNull
   public final Button btnComplete;
 
   @NonNull
+  public final FloatingActionButton fabAddTask;
+
+  @NonNull
   public final GridLayout gridActivities;
+
+  @NonNull
+  public final TextView tvSubtitle;
 
   @NonNull
   public final TextView tvTimer;
@@ -33,18 +40,21 @@ public final class ActivitySelectionBinding implements ViewBinding {
   @NonNull
   public final TextView tvTitle;
 
-  private ActivitySelectionBinding(@NonNull LinearLayout rootView, @NonNull Button btnComplete,
-      @NonNull GridLayout gridActivities, @NonNull TextView tvTimer, @NonNull TextView tvTitle) {
+  private ActivitySelectionBinding(@NonNull CoordinatorLayout rootView, @NonNull Button btnComplete,
+      @NonNull FloatingActionButton fabAddTask, @NonNull GridLayout gridActivities,
+      @NonNull TextView tvSubtitle, @NonNull TextView tvTimer, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnComplete = btnComplete;
+    this.fabAddTask = fabAddTask;
     this.gridActivities = gridActivities;
+    this.tvSubtitle = tvSubtitle;
     this.tvTimer = tvTimer;
     this.tvTitle = tvTitle;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public CoordinatorLayout getRoot() {
     return rootView;
   }
 
@@ -75,9 +85,21 @@ public final class ActivitySelectionBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.fabAddTask;
+      FloatingActionButton fabAddTask = ViewBindings.findChildViewById(rootView, id);
+      if (fabAddTask == null) {
+        break missingId;
+      }
+
       id = R.id.gridActivities;
       GridLayout gridActivities = ViewBindings.findChildViewById(rootView, id);
       if (gridActivities == null) {
+        break missingId;
+      }
+
+      id = R.id.tvSubtitle;
+      TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvSubtitle == null) {
         break missingId;
       }
 
@@ -93,8 +115,8 @@ public final class ActivitySelectionBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySelectionBinding((LinearLayout) rootView, btnComplete, gridActivities,
-          tvTimer, tvTitle);
+      return new ActivitySelectionBinding((CoordinatorLayout) rootView, btnComplete, fabAddTask,
+          gridActivities, tvSubtitle, tvTimer, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

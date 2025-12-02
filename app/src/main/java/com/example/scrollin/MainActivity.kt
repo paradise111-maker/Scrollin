@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +21,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +33,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvWeekendTime: TextView
     private lateinit var pointsManager: PointsManager
     private lateinit var lineChart: LineChart
+    private lateinit var ivSettings: ImageView
+    private lateinit var fabAddTask: FloatingActionButton
 
     // Views for animation
-    private lateinit var headerLayout: LinearLayout
+    private lateinit var headerLayout: RelativeLayout
     private lateinit var scrollView: ScrollView
     private lateinit var bottomNavigation: BottomNavigationView
 
@@ -58,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         lineChart = findViewById(R.id.lineChart)
         morningRitualsCard = findViewById(R.id.morning_rituals_card)
         nightWindDownCard = findViewById(R.id.night_wind_down_card)
+        ivSettings = findViewById(R.id.ivSettings)
+        fabAddTask = findViewById(R.id.fabAddTask)
 
         setupClickListeners()
         setupParallaxScrolling()
@@ -74,20 +81,16 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> true
-                R.id.nav_activities -> {
-                    startActivity(Intent(this, ActivitySelectionActivity::class.java))
-                    true
-                }
-                R.id.nav_perks -> {
-                    Toast.makeText(this, "Perks screen coming soon!", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
+                R.id.nav_journey -> {
+                    startActivity(Intent(this, JourneyActivity::class.java))
                     true
                 }
                 else -> false
             }
+        }
+
+        ivSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         morningRitualsCard.setOnClickListener {
@@ -100,6 +103,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ActivitySelectionActivity::class.java)
             intent.putExtra("ACTIVITY_TYPE", "NIGHT")
             startActivity(intent)
+        }
+
+        fabAddTask.setOnClickListener {
+            startActivity(Intent(this, AddTaskActivity::class.java))
         }
     }
 
@@ -247,4 +254,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-

@@ -1,3 +1,0 @@
-com.example.scrollin.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

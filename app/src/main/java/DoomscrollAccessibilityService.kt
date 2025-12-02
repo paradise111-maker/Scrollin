@@ -1,7 +1,6 @@
 package com.example.scrollin
 
 import android.accessibilityservice.AccessibilityService
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.view.LayoutInflater
@@ -58,7 +57,8 @@ class DoomscrollAccessibilityService : AccessibilityService() {
         val isInNightBlock = hour in 19..23
 
         // Check if user has earned minutes
-        val hasEarnedTime = pointsManager.getAvailableWeekendMinutes() > 0
+        val stats = pointsManager.getStatistics()
+        val hasEarnedTime = (stats["weekend_minutes"] as? Int ?: 0) > 0
 
         return ((morningBlockEnabled && isInMorningBlock) ||
                 (nightBlockEnabled && isInNightBlock)) && !hasEarnedTime
@@ -87,7 +87,8 @@ class DoomscrollAccessibilityService : AccessibilityService() {
         val btnEarnTime = overlayView?.findViewById<Button>(R.id.btnEarnTime)
 
         val appName = getAppName(appPackage)
-        val earnedMinutes = pointsManager.getAvailableWeekendMinutes()
+        val stats = pointsManager.getStatistics()
+        val earnedMinutes = stats["weekend_minutes"] as? Int ?: 0
 
         tvMessage?.text = "🚫 $appName is blocked during this time"
         tvEarnedTime?.text = "You have $earnedMinutes minutes of earned time"

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.scrollin.app-mergeDebugResources-44:/values-vi/values-vi.xml",
+            "outputFile": "com.example.scrollin.app-mergeDebugResources-45:/values-vi/values-vi.xml",
             "map": [
                 {
                     "source": "/Users/bhavyamaheshwari/.gradle/caches/9.0-milestone-1/transforms/e10d9398c36da6633fdbf2dddba58785/transformed/jetified-play-services-base-18.1.0/res/values-vi/values.xml",

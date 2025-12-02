@@ -28,15 +28,12 @@ class BadgeAdapter(private var badges: List<JourneyBadge>) : RecyclerView.Adapte
     class BadgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivIcon: ImageView = itemView.findViewById(R.id.ivBadgeIcon)
         private val tvTitle: TextView = itemView.findViewById(R.id.tvBadgeTitle)
-        private val tvDescription: TextView = itemView.findViewById(R.id.tvBadgeDescription)
 
         fun bind(badge: JourneyBadge) {
             ivIcon.setImageResource(badge.iconResId)
             tvTitle.text = badge.name
-            tvDescription.text = badge.description
 
-            // Set opacity based on whether the badge is earned
-            itemView.alpha = if (badge.isEarned) 1.0f else 0.5f
+            itemView.alpha = if (badge.isEarned) 1.0f else 0.3f
         }
     }
 }

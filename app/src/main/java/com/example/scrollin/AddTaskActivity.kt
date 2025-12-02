@@ -10,6 +10,7 @@ import java.util.UUID
 class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var etTaskTitle: EditText
+    private lateinit var etTaskDescription: EditText
     private lateinit var etTaskPoints: EditText
     private lateinit var btnSaveTask: Button
     private lateinit var pointsManager: PointsManager
@@ -21,19 +22,21 @@ class AddTaskActivity : AppCompatActivity() {
         pointsManager = PointsManager(this)
 
         etTaskTitle = findViewById(R.id.etTaskTitle)
+        etTaskDescription = findViewById(R.id.etTaskDescription)
         etTaskPoints = findViewById(R.id.etTaskPoints)
         btnSaveTask = findViewById(R.id.btnSaveTask)
 
         btnSaveTask.setOnClickListener {
             val title = etTaskTitle.text.toString()
+            val description = etTaskDescription.text.toString()
             val points = etTaskPoints.text.toString().toIntOrNull()
 
             if (title.isNotEmpty() && points != null) {
                 val newGoal = JourneyGoal(
                     id = UUID.randomUUID().toString(),
                     title = title,
+                    description = description,
                     points = points,
-                    isCompleted = false,
                     type = GoalType.GENERAL
                 )
                 pointsManager.addGoal(newGoal)

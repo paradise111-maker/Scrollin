@@ -1,9 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Changing parent to a NoActionBar theme to resolve crash -->
-    <style name="Theme.Scrollin" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#2196F3</item>
-        <item name="colorPrimaryDark">#1976D2</item>
-        <item name="colorAccent">#4CAF50</item>
-    </style>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!-- Base application theme. -->
+  <style name="Theme.Scrollin" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Primary brand color. -->
+    <item name="colorPrimary">@color/neon_purple</item>
+    <item name="colorPrimaryVariant">@color/neon_blue</item>
+    <item name="colorOnPrimary">@color/black</item>
+    <!-- Secondary brand color. -->
+    <item name="colorSecondary">@color/neon_green</item>
+    <item name="colorSecondaryVariant">@color/neon_green_light</item>
+    <item name="colorOnSecondary">@color/black</item>
+    <!-- Status bar color. -->
+    <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    <!-- Customize your theme here. -->
+  </style>
 </resources>

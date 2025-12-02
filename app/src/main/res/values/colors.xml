@@ -14,4 +14,12 @@
     <color name="background_dark">#0A0A0A</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#B0B0B0</color>
+
+    <!-- Difficulty Colors -->
+    <color name="difficulty_easy">#4CAF50</color>
+    <color name="difficulty_medium">#FFC107</color>
+    <color name="difficulty_hard">#F44336</color>
+
+    <!-- Other UI Colors -->
+    <color name="success_light">#3300FF88</color>
 </resources>

@@ -219,12 +219,14 @@ class MainActivity : AppCompatActivity() {
     private fun updateBlockStatus() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         val prefs = getSharedPreferences("ScrollinPrefs", MODE_PRIVATE)
         val wakeHour = prefs.getInt("wake_hour", 7)
 
         val morningBlockEnd = (wakeHour + 3) % 24
         val isInMorningBlock = hour in wakeHour until morningBlockEnd
         val isInNightBlock = hour in 19..23
+        val isWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
 
         when {
             isInMorningBlock -> {
@@ -235,8 +237,9 @@ class MainActivity : AppCompatActivity() {
                 tvGreetingSubtitle.text = "🌙 Night Block Active"
                 tvGreetingSubtitle.setTextColor(getColor(R.color.neon_purple))
             }
-            pointsManager.isWeekend() -> {
-                val available = pointsManager.getAvailableWeekendMinutes()
+            isWeekend -> {
+                val stats = pointsManager.getStatistics()
+                val available = stats["weekend_minutes"] as? Int ?: 0
                 tvGreetingSubtitle.text = "🎉 Weekend Time! ($available min left)"
                 tvGreetingSubtitle.setTextColor(getColor(R.color.neon_green))
             }

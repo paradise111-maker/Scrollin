@@ -1,58 +1,66 @@
 [
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/item_perk_card.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/item_perk_card.xml"
+        "merged": "com.example.scrollin.app-mergeDebugResources-46:/layout/activity_journey_enhanced.xml",
+        "source": "com.example.scrollin.app-main-49:/layout/activity_journey_enhanced.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/block_overlay.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/block_overlay.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_main.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_main.xml"
     },
     {
-        "merged": "com.example.scrollin.app-mergeDebugResources-45:/layout/activity_add_task.xml",
-        "source": "com.example.scrollin.app-main-48:/layout/activity_add_task.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/item_badge.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_badge.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_journey.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_journey.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_add_task.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_add_task.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_splash.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_splash.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/item_goal_enhanced.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_goal_enhanced.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/item_activity_grid.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/item_activity_grid.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/item_perk_card.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_perk_card.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_settings.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_settings.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/view_daily_challenge.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/view_daily_challenge.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_selection.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_selection.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_journey.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_journey.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_perks.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_perks.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/item_activity_grid.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_activity_grid.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/item_activity_button.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/item_activity_button.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/block_overlay.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/block_overlay.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/item_badge.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/item_badge.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_journey_enhanced.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_journey_enhanced.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_main.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_main.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_splash.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_splash.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/activity_add_task.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/activity_add_task.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_perks.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_perks.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-45:/layout/item_task.xml",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-48:/layout/item_task.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_selection.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_selection.xml"
+    },
+    {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/item_activity_button.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_activity_button.xml"
+    },
+    {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-mergeDebugResources-46:/layout/activity_settings.xml",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_settings.xml"
     }
 ]

@@ -24,16 +24,12 @@ public final class ItemBadgeBinding implements ViewBinding {
   public final ImageView ivBadgeIcon;
 
   @NonNull
-  public final TextView tvBadgeDescription;
-
-  @NonNull
   public final TextView tvBadgeTitle;
 
   private ItemBadgeBinding(@NonNull LinearLayout rootView, @NonNull ImageView ivBadgeIcon,
-      @NonNull TextView tvBadgeDescription, @NonNull TextView tvBadgeTitle) {
+      @NonNull TextView tvBadgeTitle) {
     this.rootView = rootView;
     this.ivBadgeIcon = ivBadgeIcon;
-    this.tvBadgeDescription = tvBadgeDescription;
     this.tvBadgeTitle = tvBadgeTitle;
   }
 
@@ -70,20 +66,13 @@ public final class ItemBadgeBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvBadgeDescription;
-      TextView tvBadgeDescription = ViewBindings.findChildViewById(rootView, id);
-      if (tvBadgeDescription == null) {
-        break missingId;
-      }
-
       id = R.id.tvBadgeTitle;
       TextView tvBadgeTitle = ViewBindings.findChildViewById(rootView, id);
       if (tvBadgeTitle == null) {
         break missingId;
       }
 
-      return new ItemBadgeBinding((LinearLayout) rootView, ivBadgeIcon, tvBadgeDescription,
-          tvBadgeTitle);
+      return new ItemBadgeBinding((LinearLayout) rootView, ivBadgeIcon, tvBadgeTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

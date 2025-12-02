@@ -24,15 +24,20 @@ public final class ActivityAddTaskBinding implements ViewBinding {
   public final Button btnSaveTask;
 
   @NonNull
+  public final EditText etTaskDescription;
+
+  @NonNull
   public final EditText etTaskPoints;
 
   @NonNull
   public final EditText etTaskTitle;
 
   private ActivityAddTaskBinding(@NonNull LinearLayout rootView, @NonNull Button btnSaveTask,
-      @NonNull EditText etTaskPoints, @NonNull EditText etTaskTitle) {
+      @NonNull EditText etTaskDescription, @NonNull EditText etTaskPoints,
+      @NonNull EditText etTaskTitle) {
     this.rootView = rootView;
     this.btnSaveTask = btnSaveTask;
+    this.etTaskDescription = etTaskDescription;
     this.etTaskPoints = etTaskPoints;
     this.etTaskTitle = etTaskTitle;
   }
@@ -70,6 +75,12 @@ public final class ActivityAddTaskBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.etTaskDescription;
+      EditText etTaskDescription = ViewBindings.findChildViewById(rootView, id);
+      if (etTaskDescription == null) {
+        break missingId;
+      }
+
       id = R.id.etTaskPoints;
       EditText etTaskPoints = ViewBindings.findChildViewById(rootView, id);
       if (etTaskPoints == null) {
@@ -82,8 +93,8 @@ public final class ActivityAddTaskBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityAddTaskBinding((LinearLayout) rootView, btnSaveTask, etTaskPoints,
-          etTaskTitle);
+      return new ActivityAddTaskBinding((LinearLayout) rootView, btnSaveTask, etTaskDescription,
+          etTaskPoints, etTaskTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

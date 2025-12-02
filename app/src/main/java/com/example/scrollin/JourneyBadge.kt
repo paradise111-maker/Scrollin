@@ -6,5 +6,5 @@ data class JourneyBadge(
     val name: String,
     val description: String,
     @DrawableRes val iconResId: Int,
-    val isEarned: Boolean = false
+    var isEarned: Boolean = false
 )

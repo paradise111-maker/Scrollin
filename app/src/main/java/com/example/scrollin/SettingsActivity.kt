@@ -78,17 +78,21 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun updateStats() {
         val stats = pointsManager.getStatistics()
+        val totalPoints = stats["total_points"] as? Int ?: 0
+        val earnedToday = stats["earned_today"] as? Int ?: 0 // This key doesn't exist, will be 0
+        val usedToday = stats["used_today"] as? Int ?: 0 // This key doesn't exist, will be 0
+
         tvStats.text = """
             📊 Your Statistics
             
-            Total Points: ${stats["total_points"]}
-            Minutes Earned Today: ${stats["earned_today"]}
-            Minutes Used Today: ${stats["used_today"]}
+            Total Points: $totalPoints
+            Minutes Earned Today: $earnedToday
+            Minutes Used Today: $usedToday
         """.trimIndent()
     }
 
     private fun resetStatistics() {
-        pointsManager.resetDaily()
+        pointsManager.resetAllProgress()
         updateStats()
         Toast.makeText(this, "Statistics reset!", Toast.LENGTH_SHORT).show()
     }

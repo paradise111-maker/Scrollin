@@ -800,6 +800,28 @@ attr logo
 attr logoAdjustViewBounds
 attr logoDescription
 attr logoScaleType
+attr lottieAnimationViewStyle
+attr lottie_asyncUpdates
+attr lottie_autoPlay
+attr lottie_cacheComposition
+attr lottie_clipTextToBoundingBox
+attr lottie_clipToCompositionBounds
+attr lottie_colorFilter
+attr lottie_defaultFontFileExtension
+attr lottie_enableMergePathsForKitKatAndAbove
+attr lottie_fallbackRes
+attr lottie_fileName
+attr lottie_ignoreDisabledSystemAnimations
+attr lottie_imageAssetsFolder
+attr lottie_loop
+attr lottie_progress
+attr lottie_rawRes
+attr lottie_renderMode
+attr lottie_repeatCount
+attr lottie_repeatMode
+attr lottie_speed
+attr lottie_url
+attr lottie_useCompositionFrameRate
 attr marginHorizontal
 attr marginLeftSystemWindowInsets
 attr marginRightSystemWindowInsets
@@ -1432,6 +1454,9 @@ color design_fab_stroke_top_inner_color
 color design_fab_stroke_top_outer_color
 color design_icon_tint
 color design_snackbar_background_color
+color difficulty_easy
+color difficulty_hard
+color difficulty_medium
 color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
@@ -2114,6 +2139,7 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color success_light
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -3238,6 +3264,7 @@ id animateToEnd
 id animateToStart
 id antiClockwise
 id anticipate
+id appBar
 id arc
 id asConfigured
 id async
@@ -3245,6 +3272,7 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id automatic
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3259,19 +3287,21 @@ id bounceEnd
 id bounceStart
 id btnAccessibility
 id btnActivity
+id btnClaimChallenge
 id btnComplete
 id btnEarnTime
 id btnGoBack
 id btnResetStats
 id btnSave
 id btnSaveTask
+id btnStartGoal
 id btnUnlockPerk
 id buttonPanel
 id cache_measures
 id callMeasure
 id cancel_button
 id carryVelocity
-id cbTaskCompleted
+id cbComplete
 id center
 id centerCrop
 id centerInside
@@ -3280,8 +3310,10 @@ id center_vertical
 id chain
 id chain2
 id chains
+id challengeCard
 id checkbox
 id checked
+id chipDifficulty
 id chronometer
 id circle_center
 id clear_text
@@ -3327,6 +3359,7 @@ id disableHome
 id disableIntraAutoTransition
 id disablePostScroll
 id disableScroll
+id disabled
 id disjoint
 id dragAnticlockwise
 id dragClockwise
@@ -3346,17 +3379,20 @@ id edit_query
 id edit_text_id
 id elastic
 id embed
+id enabled
 id end
 id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id etName
+id etTaskDescription
 id etTaskPoints
 id etTaskTitle
 id etWakeTime
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
+id fabAddGoal
 id fabAddTask
 id fade
 id fill
@@ -3387,6 +3423,7 @@ id gridActivities
 id group_divider
 id grouping
 id groups
+id hardware
 id headerLayout
 id header_title
 id hide_ime_id
@@ -3414,11 +3451,13 @@ id ivBadgeIcon
 id ivSettings
 id jumpToEnd
 id jumpToStart
+id konfettiView
 id labeled
 id layout
 id left
 id leftToRight
 id legacy
+id levelProgress
 id light
 id line1
 id line3
@@ -3426,6 +3465,7 @@ id lineChart
 id linear
 id listMode
 id list_item
+id lottie_layer_name
 id m3_side_sheet
 id marquee
 id masked
@@ -3544,12 +3584,17 @@ id pin
 id position
 id postLayout
 id pressed
+id progressChallenge
+id progressChart
+id progressGoal
 id progress_circular
 id progress_horizontal
 id radio
 id ratio
 id rectangles
 id report_drawn
+id restart
+id reverse
 id reverseSawtooth
 id right
 id rightToLeft
@@ -3557,8 +3602,13 @@ id right_icon
 id right_side
 id rounded
 id row_index_key
+id rvActiveGoals
+id rvAllBadges
+id rvAllGoals
 id rvBadges
 id rvPerks
+id rvRecentBadges
+id rvSuggestedGoals
 id rvTasks
 id save_non_transition_alpha
 id save_overlay_view
@@ -3597,6 +3647,7 @@ id snackbar_action
 id snackbar_text
 id snap
 id snapMargins
+id software
 id south
 id spacer
 id special_effects_controller_view_tag
@@ -3672,28 +3723,38 @@ id triangle
 id tvActivityIcon
 id tvActivitySubtitle
 id tvActivityTitle
-id tvBadgeDescription
 id tvBadgeTitle
 id tvBlockMessage
+id tvCategoryIcon
+id tvChallengeDescription
+id tvChallengePoints
 id tvDoomscrollingAvoided
 id tvEarnedTime
+id tvEarnedTimeValue
+id tvEstimatedTime
+id tvGoalDescription
+id tvGoalTitle
 id tvGreeting
 id tvGreetingSubtitle
+id tvLevelTitle
 id tvPerkDescription
 id tvPerkIcon
 id tvPerkTitle
+id tvPoints
+id tvPointsToNextLevel
 id tvSplashTitle
 id tvStats
 id tvStreak
+id tvStreakValue
 id tvSubtitle
-id tvTaskName
-id tvTaskPoints
 id tvTimer
 id tvTitle
 id tvTotalEarnedTime
 id tvTotalPoints
+id tvUserLevel
 id tvWeekendTime
 id tvWeeklyPoints
+id tvWeeklyPointsValue
 id unchecked
 id uniform
 id unlabeled
@@ -3835,6 +3896,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_add_task
 layout activity_journey
+layout activity_journey_enhanced
 layout activity_main
 layout activity_perks
 layout activity_selection
@@ -3862,8 +3924,8 @@ layout ime_secondary_split_test_activity
 layout item_activity_button
 layout item_activity_grid
 layout item_badge
+layout item_goal_enhanced
 layout item_perk_card
-layout item_task
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
@@ -3925,6 +3987,7 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+layout view_daily_challenge
 menu bottom_nav_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
@@ -5309,6 +5372,7 @@ styleable LinearLayoutCompat_Layout android_layout_gravity android_layout_width 
 styleable LinearProgressIndicator indeterminateAnimationType indicatorDirectionLinear
 styleable ListPopupWindow android_dropDownHorizontalOffset android_dropDownVerticalOffset
 styleable LoadingImageView circleCrop imageAspectRatio imageAspectRatioAdjust
+styleable LottieAnimationView lottie_asyncUpdates lottie_autoPlay lottie_cacheComposition lottie_clipTextToBoundingBox lottie_clipToCompositionBounds lottie_colorFilter lottie_defaultFontFileExtension lottie_enableMergePathsForKitKatAndAbove lottie_fallbackRes lottie_fileName lottie_ignoreDisabledSystemAnimations lottie_imageAssetsFolder lottie_loop lottie_progress lottie_rawRes lottie_renderMode lottie_repeatCount lottie_repeatMode lottie_speed lottie_url lottie_useCompositionFrameRate
 styleable MaterialAlertDialog backgroundInsetBottom backgroundInsetEnd backgroundInsetStart backgroundInsetTop backgroundTint
 styleable MaterialAlertDialogTheme materialAlertDialogBodyTextStyle materialAlertDialogButtonSpacerVisibility materialAlertDialogTheme materialAlertDialogTitleIconStyle materialAlertDialogTitlePanelStyle materialAlertDialogTitleTextStyle
 styleable MaterialAutoCompleteTextView android_inputType android_popupElevation dropDownBackgroundTint simpleItemLayout simpleItemSelectedColor simpleItemSelectedRippleColor simpleItems

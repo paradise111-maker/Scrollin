@@ -16,6 +16,15 @@
         android:layout_marginBottom="16dp"/>
 
     <EditText
+        android:id="@+id/etTaskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a description (optional)"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B0B0B0"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
         android:id="@+id/etTaskPoints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android.gravity="center"
-    android:padding="16dp"
-    android:background="@drawable/bg_card_dark"
-    android:layout_margin="8dp">
+    android:gravity="center"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/ivBadgeIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:src="@drawable/ic_journey" />
 
     <TextView
@@ -22,13 +20,5 @@
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:layout_marginTop="8dp"/>
-
-    <TextView
-        android:id="@+id/tvBadgeDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Badge Description"
-        android:textColor="#B0B0B0"
-        android:gravity="center"/>
 
 </LinearLayout>

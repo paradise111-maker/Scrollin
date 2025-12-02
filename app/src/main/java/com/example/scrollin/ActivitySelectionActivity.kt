@@ -24,8 +24,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
     private lateinit var pointsManager: PointsManager
 
     private var selectedActivityPoints: Int = 0
-    private var selectedActivityType: String? = null
-    private var selectedActivityDurationMinutes: Int = 0
+    private var selectedActivityCategory: Category = Category.GENERAL
     private var timer: CountDownTimer? = null
     private var isActivityRunning = false
     private var isActivityCompleted = false
@@ -75,30 +74,30 @@ class ActivitySelectionActivity : AppCompatActivity() {
         when (type) {
             "MORNING" -> {
                 tvTitle.text = "🌅 Morning Activities"
-                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
-                addActivityToGrid("💪", "Push-ups", "10 reps | 10 pts", "PUSHUPS", 10, true)
-                addActivityToGrid("🦵", "Squats", "15 reps | 10 pts", "SQUATS", 15, true)
-                addActivityToGrid("🏃", "Jumping Jacks", "20 reps | 15 pts", "JUMPING_JACKS", 20, true)
-                addActivityToGrid("🧘", "Yoga", "20-30 min | 25-35 pts", "YOGA", 0, false)
-                addActivityToGrid("✅", "Complete a Task", "Earn 5 pts", "TASK", 5, false)
+                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("💪", "Push-ups", "10 reps | 10 pts", Category.PHYSICAL, 10, true)
+                addActivityToGrid("🦵", "Squats", "15 reps | 10 pts", Category.PHYSICAL, 15, true)
+                addActivityToGrid("🏃", "Jumping Jacks", "20 reps | 15 pts", Category.PHYSICAL, 20, true)
+                addActivityToGrid("🧘", "Yoga", "20-30 min | 25-35 pts", Category.PHYSICAL, 0, false)
+                addActivityToGrid("✅", "Complete a Task", "Earn 5 pts", Category.PRODUCTIVITY, 5, false)
             }
             "NIGHT" -> {
                 tvTitle.text = "🌙 Night Activities"
-                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
-                addActivityToGrid("📚", "Reading", "30-60 min | 20-40 pts", "READING", 0, false)
-                addActivityToGrid("📝", "Journaling", "30-60 min | 20-40 pts", "JOURNALING", 0, false)
-                addActivityToGrid("👥", "Socialize", "30-60 min | 30-50 pts", "SOCIALIZE", 0, false)
+                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("📚", "Reading", "30-60 min | 20-40 pts", Category.PRODUCTIVITY, 0, false)
+                addActivityToGrid("📝", "Journaling", "30-60 min | 20-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("👥", "Socialize", "30-60 min | 30-50 pts", Category.MENTAL, 0, false)
             }
             else -> {
                 tvTitle.text = "✨ Anytime Activities"
-                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", "MEDITATION", 0, false)
-                addActivityToGrid("💪", "Quick Exercise", "5 reps | 5 pts", "PUSHUPS", 5, true)
-                addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", "READING", 0, false)
+                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("💪", "Quick Exercise", "5 reps | 5 pts", Category.PHYSICAL, 5, true)
+                addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", Category.PRODUCTIVITY, 0, false)
             }
         }
     }
 
-    private fun addActivityToGrid(icon: String, title: String, subtitle: String, type: String, target: Int, requiresCamera: Boolean) {
+    private fun addActivityToGrid(icon: String, title: String, subtitle: String, category: Category, target: Int, requiresCamera: Boolean) {
         val inflater = LayoutInflater.from(this)
         val gridItem = inflater.inflate(R.layout.item_activity_grid, gridActivities, false) as LinearLayout
 
@@ -113,7 +112,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
         val points = subtitle.substringAfterLast("|").filter { it.isDigit() }.toIntOrNull() ?: 0
 
         gridItem.setOnClickListener {
-            startActivityAction(title, points, requiresCamera, type, target)
+            startActivityAction(title, points, requiresCamera, category, target)
         }
 
         val params = GridLayout.LayoutParams().apply {
@@ -127,37 +126,46 @@ class ActivitySelectionActivity : AppCompatActivity() {
         gridActivities.addView(gridItem)
     }
 
-    private fun startActivityAction(title: String, points: Int, requiresCamera: Boolean, exercise: String, target: Int) {
+    private fun startActivityAction(title: String, points: Int, requiresCamera: Boolean, category: Category, target: Int) {
         if (isActivityRunning) {
             Toast.makeText(this, "Complete current activity first", Toast.LENGTH_SHORT).show()
             return
         }
 
-        this.selectedActivityType = exercise
+        this.selectedActivityCategory = category
 
-        when (exercise) {
-            "MEDITATION" -> showMeditationDialog(exercise)
-            "YOGA" -> showYogaDialog(exercise)
-            "READING" -> showReadingDialog(exercise)
-            "JOURNALING" -> showJournalingDialog(exercise)
-            "SOCIALIZE" -> showSocializeDialog(exercise)
+        when (category) {
+            Category.MENTAL -> showMeditationDialog(category)
+            Category.PHYSICAL -> {
+                if(title.contains("Yoga")) {
+                    showYogaDialog(category)
+                } else {
+                     val intent = Intent(this, CameraActivity::class.java)
+                    intent.putExtra("ACTIVITY_TYPE", title)
+                    intent.putExtra("TARGET_REPS", target)
+                    intent.putExtra("ACTIVITY_NAME", title)
+                    intent.putExtra("POINTS", points)
+                    startActivityForResult(intent, 100)
+                }
+            }
+            Category.PRODUCTIVITY -> showReadingDialog(category)
             else -> {
                 selectedActivityPoints = points
                 if (requiresCamera) {
                     val intent = Intent(this, CameraActivity::class.java)
-                    intent.putExtra("ACTIVITY_TYPE", exercise)
+                    intent.putExtra("ACTIVITY_TYPE", title)
                     intent.putExtra("TARGET_REPS", target)
                     intent.putExtra("ACTIVITY_NAME", title)
                     intent.putExtra("POINTS", points)
                     startActivityForResult(intent, 100)
                 } else {
-                    startTimerActivity(title, points, null, exercise)
+                    startTimerActivity(title, points, null, category)
                 }
             }
         }
     }
 
-    private fun showMeditationDialog(activityType: String) {
+    private fun showMeditationDialog(category: Category) {
         val options = arrayOf("5 minutes (10 points)", "10 minutes (20 points)", "15 minutes (30 points)", "30 minutes (40 points)")
         val durations = arrayOf(300L, 600L, 900L, 1800L)
         val points = arrayOf(10, 20, 30, 40)
@@ -165,12 +173,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Choose Meditation Time")
             .setItems(options) { _, which ->
-                startTimerActivity("Meditation", points[which], durations[which], activityType)
+                startTimerActivity("Meditation", points[which], durations[which], category)
             }
             .show()
     }
 
-    private fun showYogaDialog(activityType: String) {
+    private fun showYogaDialog(category: Category) {
         val options = arrayOf("20 minutes (25 points)", "30 minutes (35 points)")
         val durations = arrayOf(1200L, 1800L)
         val points = arrayOf(25, 35)
@@ -178,12 +186,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Choose Yoga Time")
             .setItems(options) { _, which ->
-                startTimerActivity("Yoga", points[which], durations[which], activityType)
+                startTimerActivity("Yoga", points[which], durations[which], category)
             }
             .show()
     }
 
-    private fun showReadingDialog(activityType: String) {
+    private fun showReadingDialog(category: Category) {
         val options = arrayOf("30 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
         val durations = arrayOf(1800L, 2700L, 3600L)
         val points = arrayOf(20, 30, 40)
@@ -191,12 +199,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Choose Reading Time")
             .setItems(options) { _, which ->
-                startTimerActivity("Reading", points[which], durations[which], activityType)
+                startTimerActivity("Reading", points[which], durations[which], category)
             }
             .show()
     }
 
-    private fun showJournalingDialog(activityType: String) {
+    private fun showJournalingDialog(category: Category) {
         val options = arrayOf("30 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
         val durations = arrayOf(1800L, 2700L, 3600L)
         val points = arrayOf(20, 30, 40)
@@ -204,12 +212,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Choose Journaling Time")
             .setItems(options) { _, which ->
-                startTimerActivity("Journaling", points[which], durations[which], activityType)
+                startTimerActivity("Journaling", points[which], durations[which], category)
             }
             .show()
     }
 
-    private fun showSocializeDialog(activityType: String) {
+    private fun showSocializeDialog(category: Category) {
         val options = arrayOf("30 minutes (30 points)", "45 minutes (40 points)", "60 minutes (50 points)")
         val durations = arrayOf(1800L, 2700L, 3600L)
         val points = arrayOf(30, 40, 50)
@@ -217,12 +225,12 @@ class ActivitySelectionActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Choose Socializing Time")
             .setItems(options) { _, which ->
-                startTimerActivity("Socialize", points[which], durations[which], activityType)
+                startTimerActivity("Socialize", points[which], durations[which], category)
             }
             .show()
     }
 
-    private fun startTimerActivity(title: String, points: Int, duration: Long? = null, activityType: String) {
+    private fun startTimerActivity(title: String, points: Int, duration: Long? = null, category: Category) {
         isActivityRunning = true
         isActivityCompleted = false
 
@@ -234,8 +242,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
         }
         
         selectedActivityPoints = points
-        selectedActivityType = activityType
-        selectedActivityDurationMinutes = (durationSeconds / 60).toInt()
+        selectedActivityCategory = category
 
         tvTimer.text = "Activity: $title\nTime remaining: ${formatTime(durationSeconds)}"
         btnComplete.isEnabled = false
@@ -267,7 +274,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun completeActivity() {
-        pointsManager.addPoints(selectedActivityPoints, selectedActivityType, selectedActivityDurationMinutes)
+        pointsManager.addPoints(selectedActivityPoints, selectedActivityCategory)
         Toast.makeText(this, "🎉 +$selectedActivityPoints points earned!", Toast.LENGTH_LONG).show()
         
         btnComplete.postDelayed({
@@ -280,7 +287,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
         
         if (requestCode == 100 && resultCode == RESULT_OK) {
             val points = data?.getIntExtra("POINTS_EARNED", 0) ?: 0
-            pointsManager.addPoints(points, selectedActivityType)
+            pointsManager.addPoints(points, selectedActivityCategory)
             Toast.makeText(this, "🎉 +$points points earned!", Toast.LENGTH_SHORT).show()
             finish()
         }

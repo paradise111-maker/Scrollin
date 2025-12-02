@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.scrollin.app-mergeDebugResources-44:/values-en-rXC/values-en-rXC.xml",
+            "outputFile": "com.example.scrollin.app-mergeDebugResources-45:/values-en-rXC/values-en-rXC.xml",
             "map": [
                 {
                     "source": "/Users/bhavyamaheshwari/.gradle/caches/9.0-milestone-1/transforms/7f824f89d28a9b2a07d981abca8e5031/transformed/core-1.12.0/res/values-en-rXC/values-en-rXC.xml",

@@ -61,6 +61,10 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    // Konfetti & Lottie
+    implementation("nl.dionsegijn:konfetti-xml:2.0.3")
+    implementation("com.airbnb.android:lottie:6.4.0")
+
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

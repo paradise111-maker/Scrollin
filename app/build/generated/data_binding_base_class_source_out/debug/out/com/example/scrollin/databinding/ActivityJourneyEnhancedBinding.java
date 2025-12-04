@@ -8,15 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
+import androidx.viewpager2.widget.ViewPager2;
 import com.example.scrollin.R;
-import com.github.mikephil.charting.charts.LineChart;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.tabs.TabLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -25,12 +23,6 @@ import nl.dionsegijn.konfetti.xml.KonfettiView;
 public final class ActivityJourneyEnhancedBinding implements ViewBinding {
   @NonNull
   private final CoordinatorLayout rootView;
-
-  @NonNull
-  public final AppBarLayout appBar;
-
-  @NonNull
-  public final MaterialCardView challengeCard;
 
   @NonNull
   public final CoordinatorLayout coordinator;
@@ -45,22 +37,7 @@ public final class ActivityJourneyEnhancedBinding implements ViewBinding {
   public final CircularProgressIndicator levelProgress;
 
   @NonNull
-  public final LineChart progressChart;
-
-  @NonNull
-  public final RecyclerView rvActiveGoals;
-
-  @NonNull
-  public final RecyclerView rvAllBadges;
-
-  @NonNull
-  public final RecyclerView rvAllGoals;
-
-  @NonNull
-  public final RecyclerView rvRecentBadges;
-
-  @NonNull
-  public final RecyclerView rvSuggestedGoals;
+  public final TabLayout tabLayout;
 
   @NonNull
   public final TextView tvEarnedTimeValue;
@@ -80,35 +57,29 @@ public final class ActivityJourneyEnhancedBinding implements ViewBinding {
   @NonNull
   public final TextView tvWeeklyPointsValue;
 
+  @NonNull
+  public final ViewPager2 viewPager;
+
   private ActivityJourneyEnhancedBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull AppBarLayout appBar, @NonNull MaterialCardView challengeCard,
       @NonNull CoordinatorLayout coordinator, @NonNull FloatingActionButton fabAddGoal,
       @NonNull KonfettiView konfettiView, @NonNull CircularProgressIndicator levelProgress,
-      @NonNull LineChart progressChart, @NonNull RecyclerView rvActiveGoals,
-      @NonNull RecyclerView rvAllBadges, @NonNull RecyclerView rvAllGoals,
-      @NonNull RecyclerView rvRecentBadges, @NonNull RecyclerView rvSuggestedGoals,
-      @NonNull TextView tvEarnedTimeValue, @NonNull TextView tvLevelTitle,
-      @NonNull TextView tvPointsToNextLevel, @NonNull TextView tvStreakValue,
-      @NonNull TextView tvUserLevel, @NonNull TextView tvWeeklyPointsValue) {
+      @NonNull TabLayout tabLayout, @NonNull TextView tvEarnedTimeValue,
+      @NonNull TextView tvLevelTitle, @NonNull TextView tvPointsToNextLevel,
+      @NonNull TextView tvStreakValue, @NonNull TextView tvUserLevel,
+      @NonNull TextView tvWeeklyPointsValue, @NonNull ViewPager2 viewPager) {
     this.rootView = rootView;
-    this.appBar = appBar;
-    this.challengeCard = challengeCard;
     this.coordinator = coordinator;
     this.fabAddGoal = fabAddGoal;
     this.konfettiView = konfettiView;
     this.levelProgress = levelProgress;
-    this.progressChart = progressChart;
-    this.rvActiveGoals = rvActiveGoals;
-    this.rvAllBadges = rvAllBadges;
-    this.rvAllGoals = rvAllGoals;
-    this.rvRecentBadges = rvRecentBadges;
-    this.rvSuggestedGoals = rvSuggestedGoals;
+    this.tabLayout = tabLayout;
     this.tvEarnedTimeValue = tvEarnedTimeValue;
     this.tvLevelTitle = tvLevelTitle;
     this.tvPointsToNextLevel = tvPointsToNextLevel;
     this.tvStreakValue = tvStreakValue;
     this.tvUserLevel = tvUserLevel;
     this.tvWeeklyPointsValue = tvWeeklyPointsValue;
+    this.viewPager = viewPager;
   }
 
   @Override
@@ -138,18 +109,6 @@ public final class ActivityJourneyEnhancedBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.appBar;
-      AppBarLayout appBar = ViewBindings.findChildViewById(rootView, id);
-      if (appBar == null) {
-        break missingId;
-      }
-
-      id = R.id.challengeCard;
-      MaterialCardView challengeCard = ViewBindings.findChildViewById(rootView, id);
-      if (challengeCard == null) {
-        break missingId;
-      }
-
       CoordinatorLayout coordinator = (CoordinatorLayout) rootView;
 
       id = R.id.fabAddGoal;
@@ -170,39 +129,9 @@ public final class ActivityJourneyEnhancedBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.progressChart;
-      LineChart progressChart = ViewBindings.findChildViewById(rootView, id);
-      if (progressChart == null) {
-        break missingId;
-      }
-
-      id = R.id.rvActiveGoals;
-      RecyclerView rvActiveGoals = ViewBindings.findChildViewById(rootView, id);
-      if (rvActiveGoals == null) {
-        break missingId;
-      }
-
-      id = R.id.rvAllBadges;
-      RecyclerView rvAllBadges = ViewBindings.findChildViewById(rootView, id);
-      if (rvAllBadges == null) {
-        break missingId;
-      }
-
-      id = R.id.rvAllGoals;
-      RecyclerView rvAllGoals = ViewBindings.findChildViewById(rootView, id);
-      if (rvAllGoals == null) {
-        break missingId;
-      }
-
-      id = R.id.rvRecentBadges;
-      RecyclerView rvRecentBadges = ViewBindings.findChildViewById(rootView, id);
-      if (rvRecentBadges == null) {
-        break missingId;
-      }
-
-      id = R.id.rvSuggestedGoals;
-      RecyclerView rvSuggestedGoals = ViewBindings.findChildViewById(rootView, id);
-      if (rvSuggestedGoals == null) {
+      id = R.id.tabLayout;
+      TabLayout tabLayout = ViewBindings.findChildViewById(rootView, id);
+      if (tabLayout == null) {
         break missingId;
       }
 
@@ -242,10 +171,15 @@ public final class ActivityJourneyEnhancedBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityJourneyEnhancedBinding((CoordinatorLayout) rootView, appBar, challengeCard,
-          coordinator, fabAddGoal, konfettiView, levelProgress, progressChart, rvActiveGoals,
-          rvAllBadges, rvAllGoals, rvRecentBadges, rvSuggestedGoals, tvEarnedTimeValue,
-          tvLevelTitle, tvPointsToNextLevel, tvStreakValue, tvUserLevel, tvWeeklyPointsValue);
+      id = R.id.viewPager;
+      ViewPager2 viewPager = ViewBindings.findChildViewById(rootView, id);
+      if (viewPager == null) {
+        break missingId;
+      }
+
+      return new ActivityJourneyEnhancedBinding((CoordinatorLayout) rootView, coordinator,
+          fabAddGoal, konfettiView, levelProgress, tabLayout, tvEarnedTimeValue, tvLevelTitle,
+          tvPointsToNextLevel, tvStreakValue, tvUserLevel, tvWeeklyPointsValue, viewPager);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

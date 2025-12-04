@@ -7,10 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class BadgeAdapter(private var badges: List<JourneyBadge>) : RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>() {
+class BadgeAdapter(private var badges: List<JourneyBadge>) : 
+    RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BadgeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_badge, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_badge_enhanced, parent, false)
         return BadgeViewHolder(view)
     }
 
@@ -28,12 +30,21 @@ class BadgeAdapter(private var badges: List<JourneyBadge>) : RecyclerView.Adapte
     class BadgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivIcon: ImageView = itemView.findViewById(R.id.ivBadgeIcon)
         private val tvTitle: TextView = itemView.findViewById(R.id.tvBadgeTitle)
+        private val tvDescription: TextView = itemView.findViewById(R.id.tvBadgeDescription)
+        private val ivLock: ImageView = itemView.findViewById(R.id.ivLockIcon)
 
         fun bind(badge: JourneyBadge) {
             ivIcon.setImageResource(badge.iconResId)
             tvTitle.text = badge.name
+            tvDescription.text = badge.description
 
-            itemView.alpha = if (badge.isEarned) 1.0f else 0.3f
+            if (badge.isEarned) {
+                itemView.alpha = 1.0f
+                ivLock.visibility = View.GONE
+            } else {
+                itemView.alpha = 0.4f
+                ivLock.visibility = View.VISIBLE
+            }
         }
     }
 }

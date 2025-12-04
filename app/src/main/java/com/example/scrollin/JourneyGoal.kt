@@ -16,7 +16,9 @@ data class JourneyGoal(
     var isPinned: Boolean = false,
     val createdAt: Long = System.currentTimeMillis(),
     val completedAt: Long? = null,
-    val type: GoalType // MORNING, NIGHT, GENERAL
+    val type: GoalType, // MORNING, NIGHT, GENERAL
+    var isInProgress: Boolean = false, // NEW: Track if task is currently running
+    var startTime: Long? = null // NEW: Track when task was started
 )
 
 enum class Difficulty(val multiplier: Float) {

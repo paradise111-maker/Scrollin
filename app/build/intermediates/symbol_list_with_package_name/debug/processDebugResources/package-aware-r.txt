@@ -3264,7 +3264,6 @@ id animateToEnd
 id animateToStart
 id antiClockwise
 id anticipate
-id appBar
 id arc
 id asConfigured
 id async
@@ -3273,6 +3272,7 @@ id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
 id automatic
+id barChartCategories
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3310,7 +3310,6 @@ id center_vertical
 id chain
 id chain2
 id chains
-id challengeCard
 id checkbox
 id checked
 id chipDifficulty
@@ -3448,6 +3447,7 @@ id inward
 id italic
 id item_touch_helper_previous_elevation
 id ivBadgeIcon
+id ivLockIcon
 id ivSettings
 id jumpToEnd
 id jumpToStart
@@ -3462,6 +3462,7 @@ id light
 id line1
 id line3
 id lineChart
+id lineChartWeekly
 id linear
 id listMode
 id list_item
@@ -3584,8 +3585,8 @@ id pin
 id position
 id postLayout
 id pressed
+id progressBadges
 id progressChallenge
-id progressChart
 id progressGoal
 id progress_circular
 id progress_horizontal
@@ -3602,13 +3603,8 @@ id right_icon
 id right_side
 id rounded
 id row_index_key
-id rvActiveGoals
-id rvAllBadges
-id rvAllGoals
 id rvBadges
 id rvPerks
-id rvRecentBadges
-id rvSuggestedGoals
 id rvTasks
 id save_non_transition_alpha
 id save_overlay_view
@@ -3674,6 +3670,7 @@ id submit_area
 id supportScrollUp
 id switchMorningBlock
 id switchNightBlock
+id tabLayout
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3723,11 +3720,15 @@ id triangle
 id tvActivityIcon
 id tvActivitySubtitle
 id tvActivityTitle
+id tvAveragePoints
+id tvBadgeDescription
+id tvBadgeProgress
 id tvBadgeTitle
 id tvBlockMessage
 id tvCategoryIcon
 id tvChallengeDescription
 id tvChallengePoints
+id tvCompletionRate
 id tvDoomscrollingAvoided
 id tvEarnedTime
 id tvEarnedTimeValue
@@ -3747,6 +3748,7 @@ id tvStats
 id tvStreak
 id tvStreakValue
 id tvSubtitle
+id tvTasksCompleted
 id tvTimer
 id tvTitle
 id tvTotalEarnedTime
@@ -3761,6 +3763,7 @@ id unlabeled
 id up
 id useLogo
 id vertical_only
+id viewPager
 id view_offset_helper
 id view_transition
 id view_tree_lifecycle_owner
@@ -3919,11 +3922,15 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout fragment_badges
+layout fragment_progress
+layout fragment_tasks
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_activity_button
 layout item_activity_grid
 layout item_badge
+layout item_badge_enhanced
 layout item_goal_enhanced
 layout item_perk_card
 layout m3_alert_dialog

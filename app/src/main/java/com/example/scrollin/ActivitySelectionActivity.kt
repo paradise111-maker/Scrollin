@@ -79,14 +79,14 @@ class ActivitySelectionActivity : AppCompatActivity() {
                 addActivityToGrid("🦵", "Squats", "15 reps | 10 pts", Category.PHYSICAL, 15, true)
                 addActivityToGrid("🏃", "Jumping Jacks", "20 reps | 15 pts", Category.PHYSICAL, 20, true)
                 addActivityToGrid("🧘", "Yoga", "20-30 min | 25-35 pts", Category.PHYSICAL, 0, false)
-                addActivityToGrid("✅", "Complete a Task", "Earn 5 pts", Category.PRODUCTIVITY, 5, false)
+                addActivityToGrid("✅", "Complete a Task", "30 sec | 10 pts", Category.PRODUCTIVITY, 0, false)
             }
             "NIGHT" -> {
                 tvTitle.text = "🌙 Night Activities"
                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
                 addActivityToGrid("📚", "Reading", "30-60 min | 20-40 pts", Category.PRODUCTIVITY, 0, false)
-                addActivityToGrid("📝", "Journaling", "30-60 min | 20-40 pts", Category.MENTAL, 0, false)
-                addActivityToGrid("👥", "Socialize", "30-60 min | 30-50 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("📝", "Journaling", "25-60 min | 20-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("👥", "Socialize", "30-60 min | 15-35 pts", Category.MENTAL, 0, false)
             }
             else -> {
                 tvTitle.text = "✨ Anytime Activities"
@@ -134,21 +134,13 @@ class ActivitySelectionActivity : AppCompatActivity() {
 
         this.selectedActivityCategory = category
 
-        when (category) {
-            Category.MENTAL -> showMeditationDialog(category)
-            Category.PHYSICAL -> {
-                if(title.contains("Yoga")) {
-                    showYogaDialog(category)
-                } else {
-                     val intent = Intent(this, CameraActivity::class.java)
-                    intent.putExtra("ACTIVITY_TYPE", title)
-                    intent.putExtra("TARGET_REPS", target)
-                    intent.putExtra("ACTIVITY_NAME", title)
-                    intent.putExtra("POINTS", points)
-                    startActivityForResult(intent, 100)
-                }
-            }
-            Category.PRODUCTIVITY -> showReadingDialog(category)
+        when (title) {
+            "Complete a Task" -> startTimerActivity(title, 10, 30, category)
+            "Meditation" -> showMeditationDialog(category)
+            "Yoga" -> showYogaDialog(category)
+            "Reading" -> showReadingDialog(category)
+            "Journaling" -> showJournalingDialog(category)
+            "Socialize" -> showSocializeDialog(category)
             else -> {
                 selectedActivityPoints = points
                 if (requiresCamera) {
@@ -205,8 +197,8 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun showJournalingDialog(category: Category) {
-        val options = arrayOf("30 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
-        val durations = arrayOf(1800L, 2700L, 3600L)
+        val options = arrayOf("25 minutes (20 points)", "45 minutes (30 points)", "60 minutes (40 points)")
+        val durations = arrayOf(1500L, 2700L, 3600L)
         val points = arrayOf(20, 30, 40)
 
         AlertDialog.Builder(this)
@@ -218,9 +210,9 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun showSocializeDialog(category: Category) {
-        val options = arrayOf("30 minutes (30 points)", "45 minutes (40 points)", "60 minutes (50 points)")
-        val durations = arrayOf(1800L, 2700L, 3600L)
-        val points = arrayOf(30, 40, 50)
+        val options = arrayOf("30 minutes (15 points)", "60 minutes (35 points)")
+        val durations = arrayOf(1800L, 3600L)
+        val points = arrayOf(15, 35)
 
         AlertDialog.Builder(this)
             .setTitle("Choose Socializing Time")
@@ -275,6 +267,19 @@ class ActivitySelectionActivity : AppCompatActivity() {
 
     private fun completeActivity() {
         pointsManager.addPoints(selectedActivityPoints, selectedActivityCategory)
+        
+        // Mark corresponding journey goal as complete
+        val goals = pointsManager.getGoals()
+        val matchingGoal = goals.find { goal ->
+            !goal.isCompleted && 
+            goal.category == selectedActivityCategory &&
+            goal.estimatedTime != null
+        }
+        
+        matchingGoal?.let { goal ->
+            pointsManager.completeGoal(goal)
+        }
+        
         Toast.makeText(this, "🎉 +$selectedActivityPoints points earned!", Toast.LENGTH_LONG).show()
         
         btnComplete.postDelayed({

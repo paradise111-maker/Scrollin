@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -35,15 +37,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lineChart: LineChart
     private lateinit var ivSettings: ImageView
     private lateinit var fabAddTask: FloatingActionButton
-
-    // Views for animation
     private lateinit var headerLayout: RelativeLayout
     private lateinit var scrollView: ScrollView
     private lateinit var bottomNavigation: BottomNavigationView
-
-    // Clickable cards
     private lateinit var morningRitualsCard: LinearLayout
     private lateinit var nightWindDownCard: LinearLayout
+    
+    // NEW: Weekend time indicator
+    private lateinit var tvWeekendTimeStatus: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +52,15 @@ class MainActivity : AppCompatActivity() {
 
         pointsManager = PointsManager(this)
 
-        // Initialize views
+        // Schedule daily reset
+        DailyResetWorker.schedule(this)
+
         tvGreeting = findViewById(R.id.tvGreeting)
         tvGreetingSubtitle = findViewById(R.id.tvGreetingSubtitle)
         tvWeeklyPoints = findViewById(R.id.tvWeeklyPoints)
         tvStreak = findViewById(R.id.tvStreak)
         tvWeekendTime = findViewById(R.id.tvWeekendTime)
+        tvWeekendTimeStatus = findViewById(R.id.tvWeekendTimeStatus)
         scrollView = findViewById(R.id.scrollView)
         headerLayout = findViewById(R.id.headerLayout)
         bottomNavigation = findViewById(R.id.bottomNavigation)
@@ -68,13 +72,57 @@ class MainActivity : AppCompatActivity() {
 
         setupClickListeners()
         setupParallaxScrolling()
+        
+        // Check accessibility service status on startup
+        checkAccessibilityServiceStatus()
     }
 
     override fun onResume() {
         super.onResume()
         updateUI()
         runEntranceAnimation()
-        bottomNavigation.selectedItemId = R.id.nav_dashboard // Fix for stuck icon
+        bottomNavigation.selectedItemId = R.id.nav_dashboard
+        checkAccessibilityServiceStatus()
+    }
+
+    private fun checkAccessibilityServiceStatus() {
+        val accessibilityEnabled = try {
+            Settings.Secure.getInt(
+                contentResolver,
+                Settings.Secure.ACCESSIBILITY_ENABLED
+            ) == 1
+        } catch (e: Exception) {
+            false
+        }
+
+        val serviceName = "$packageName/.DoomscrollAccessibilityService"
+        val enabledServices = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: ""
+
+        val isServiceEnabled = enabledServices.contains(serviceName)
+
+        if (!isServiceEnabled && !accessibilityEnabled) {
+            showAccessibilityWarning()
+        }
+    }
+
+    private fun showAccessibilityWarning() {
+        AlertDialog.Builder(this)
+            .setTitle("⚠️ Setup Required")
+            .setMessage("Scrollin needs accessibility permission to block distracting apps. Enable it now?")
+            .setPositiveButton("Enable") { _, _ ->
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
+                Toast.makeText(
+                    this,
+                    "Find and enable 'Scrollin' in the list",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            .setNegativeButton("Later", null)
+            .show()
     }
 
     private fun setupClickListeners() {
@@ -108,6 +156,11 @@ class MainActivity : AppCompatActivity() {
         fabAddTask.setOnClickListener {
             startActivity(Intent(this, AddTaskActivity::class.java))
         }
+        
+        // NEW: Click on weekend time to see details
+        tvWeekendTime.setOnClickListener {
+            showWeekendTimeDetails()
+        }
     }
 
     private fun setupParallaxScrolling() {
@@ -137,16 +190,50 @@ class MainActivity : AppCompatActivity() {
         tvStreak.text = "$streak days"
 
         val weekendMinutes = stats["weekend_minutes"] as? Int ?: 0
-        val hours = weekendMinutes / 60
-        val minutes = weekendMinutes % 60
+        val usedMinutesToday = prefs.getInt("weekend_minutes_used_today", 0)
+        val remainingMinutes = (weekendMinutes - usedMinutesToday).coerceAtLeast(0)
+        
+        val hours = remainingMinutes / 60
+        val minutes = remainingMinutes % 60
         tvWeekendTime.text = if (hours > 0) "${hours}h ${minutes}m" else "$minutes min"
+        
+        // NEW: Show usage status
+        if (usedMinutesToday > 0) {
+            tvWeekendTimeStatus.text = "Used $usedMinutesToday min today"
+            tvWeekendTimeStatus.visibility = View.VISIBLE
+        } else {
+            tvWeekendTimeStatus.visibility = View.GONE
+        }
 
         updateBlockStatus()
         setupChart()
     }
 
+    private fun showWeekendTimeDetails() {
+        val prefs = getSharedPreferences("ScrollinPrefs", MODE_PRIVATE)
+        val stats = pointsManager.getStatistics()
+        val totalEarned = stats["weekend_minutes"] as? Int ?: 0
+        val usedToday = prefs.getInt("weekend_minutes_used_today", 0)
+        val remaining = (totalEarned - usedToday).coerceAtLeast(0)
+
+        val message = """
+            Weekend Time Summary
+            
+            📊 Total Earned: $totalEarned minutes
+            ✅ Used Today: $usedToday minutes
+            ⏰ Remaining: $remaining minutes
+            
+            ${if (remaining > 0) "You can use your earned time during blocked periods!" else "Complete more activities to earn time!"}
+        """.trimIndent()
+
+        AlertDialog.Builder(this)
+            .setTitle("🎉 Weekend Time")
+            .setMessage(message)
+            .setPositiveButton("Got it!", null)
+            .show()
+    }
+
     private fun setupChart() {
-        // Get REAL data from PointsManager
         val pointsData = pointsManager.getLast7DaysPoints()
 
         val entries = ArrayList<Entry>()
@@ -154,9 +241,7 @@ class MainActivity : AppCompatActivity() {
             entries.add(Entry(index.toFloat(), points.toFloat()))
         }
 
-        // If no data yet, show empty chart
         if (entries.all { it.y == 0f }) {
-            // Add placeholder data to show chart structure
             entries.clear()
             for (i in 0..6) {
                 entries.add(Entry(i.toFloat(), 0f))
@@ -196,7 +281,7 @@ class MainActivity : AppCompatActivity() {
     private fun runEntranceAnimation() {
         val viewsToAnimate = listOf(
             headerLayout,
-            (tvWeeklyPoints.parent.parent.parent as View), // Points & Stats Card
+            (tvWeeklyPoints.parent.parent.parent as View),
             findViewById(R.id.activities_today_title),
             findViewById(R.id.morning_rituals_card),
             findViewById(R.id.night_wind_down_card),
@@ -240,7 +325,9 @@ class MainActivity : AppCompatActivity() {
             isWeekend -> {
                 val stats = pointsManager.getStatistics()
                 val available = stats["weekend_minutes"] as? Int ?: 0
-                tvGreetingSubtitle.text = "🎉 Weekend Time! ($available min left)"
+                val used = prefs.getInt("weekend_minutes_used_today", 0)
+                val remaining = (available - used).coerceAtLeast(0)
+                tvGreetingSubtitle.text = "🎉 Weekend Time! ($remaining min left)"
                 tvGreetingSubtitle.setTextColor(getColor(R.color.neon_green))
             }
             else -> {

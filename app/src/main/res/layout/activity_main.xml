@@ -167,7 +167,9 @@
                             android:background="@drawable/bg_card_dark"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp"
+                            android:clickable="true"
+                            android:focusable="true">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -191,6 +193,17 @@
                                 android:text="Earned Time"
                                 android:textColor="#B0B0B0"
                                 android:textSize="12sp" />
+                            
+                            <!-- NEW: Usage status -->
+                            <TextView
+                                android:id="@+id/tvWeekendTimeStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Used 15 min today"
+                                android:textColor="@color/neon_yellow"
+                                android:textSize="10sp"
+                                android:layout_marginTop="4dp"
+                                android:visibility="gone"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

@@ -65,6 +65,9 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvWeekendTime;
 
   @NonNull
+  public final TextView tvWeekendTimeStatus;
+
+  @NonNull
   public final TextView tvWeeklyPoints;
 
   private ActivityMainBinding(@NonNull RelativeLayout rootView,
@@ -74,7 +77,8 @@ public final class ActivityMainBinding implements ViewBinding {
       @NonNull LinearLayout morningRitualsCard, @NonNull LinearLayout nightWindDownCard,
       @NonNull ScrollView scrollView, @NonNull TextView tvGreeting,
       @NonNull TextView tvGreetingSubtitle, @NonNull TextView tvStreak,
-      @NonNull TextView tvWeekendTime, @NonNull TextView tvWeeklyPoints) {
+      @NonNull TextView tvWeekendTime, @NonNull TextView tvWeekendTimeStatus,
+      @NonNull TextView tvWeeklyPoints) {
     this.rootView = rootView;
     this.activitiesTodayTitle = activitiesTodayTitle;
     this.bottomNavigation = bottomNavigation;
@@ -89,6 +93,7 @@ public final class ActivityMainBinding implements ViewBinding {
     this.tvGreetingSubtitle = tvGreetingSubtitle;
     this.tvStreak = tvStreak;
     this.tvWeekendTime = tvWeekendTime;
+    this.tvWeekendTimeStatus = tvWeekendTimeStatus;
     this.tvWeeklyPoints = tvWeeklyPoints;
   }
 
@@ -197,6 +202,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvWeekendTimeStatus;
+      TextView tvWeekendTimeStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvWeekendTimeStatus == null) {
+        break missingId;
+      }
+
       id = R.id.tvWeeklyPoints;
       TextView tvWeeklyPoints = ViewBindings.findChildViewById(rootView, id);
       if (tvWeeklyPoints == null) {
@@ -206,7 +217,7 @@ public final class ActivityMainBinding implements ViewBinding {
       return new ActivityMainBinding((RelativeLayout) rootView, activitiesTodayTitle,
           bottomNavigation, fabAddTask, headerLayout, ivSettings, lineChart, morningRitualsCard,
           nightWindDownCard, scrollView, tvGreeting, tvGreetingSubtitle, tvStreak, tvWeekendTime,
-          tvWeeklyPoints);
+          tvWeekendTimeStatus, tvWeeklyPoints);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

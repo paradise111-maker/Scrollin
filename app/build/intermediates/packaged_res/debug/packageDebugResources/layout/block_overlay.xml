@@ -44,6 +44,20 @@
         android:gravity="center"
         android:layout_marginBottom="32dp"/>
 
+    <!-- NEW: Use Weekend Time Button -->
+    <Button
+        android:id="@+id/btnUseWeekendTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🎉 Use My Earned Time"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:backgroundTint="#00FF88"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/btnEarnTime"
         android:layout_width="match_parent"

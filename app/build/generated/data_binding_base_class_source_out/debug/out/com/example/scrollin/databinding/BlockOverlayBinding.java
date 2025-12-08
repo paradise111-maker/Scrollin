@@ -27,16 +27,21 @@ public final class BlockOverlayBinding implements ViewBinding {
   public final Button btnGoBack;
 
   @NonNull
+  public final Button btnUseWeekendTime;
+
+  @NonNull
   public final TextView tvBlockMessage;
 
   @NonNull
   public final TextView tvEarnedTime;
 
   private BlockOverlayBinding(@NonNull LinearLayout rootView, @NonNull Button btnEarnTime,
-      @NonNull Button btnGoBack, @NonNull TextView tvBlockMessage, @NonNull TextView tvEarnedTime) {
+      @NonNull Button btnGoBack, @NonNull Button btnUseWeekendTime,
+      @NonNull TextView tvBlockMessage, @NonNull TextView tvEarnedTime) {
     this.rootView = rootView;
     this.btnEarnTime = btnEarnTime;
     this.btnGoBack = btnGoBack;
+    this.btnUseWeekendTime = btnUseWeekendTime;
     this.tvBlockMessage = tvBlockMessage;
     this.tvEarnedTime = tvEarnedTime;
   }
@@ -80,6 +85,12 @@ public final class BlockOverlayBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnUseWeekendTime;
+      Button btnUseWeekendTime = ViewBindings.findChildViewById(rootView, id);
+      if (btnUseWeekendTime == null) {
+        break missingId;
+      }
+
       id = R.id.tvBlockMessage;
       TextView tvBlockMessage = ViewBindings.findChildViewById(rootView, id);
       if (tvBlockMessage == null) {
@@ -93,7 +104,7 @@ public final class BlockOverlayBinding implements ViewBinding {
       }
 
       return new BlockOverlayBinding((LinearLayout) rootView, btnEarnTime, btnGoBack,
-          tvBlockMessage, tvEarnedTime);
+          btnUseWeekendTime, tvBlockMessage, tvEarnedTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

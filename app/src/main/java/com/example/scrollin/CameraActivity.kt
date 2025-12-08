@@ -23,6 +23,12 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.atan2
 
+private data class RepData(
+    val timestamp: Long,
+    val angle: Double,
+    val quality: Float // 0-1 score
+)
+
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var previewView: PreviewView
@@ -44,6 +50,7 @@ class CameraActivity : AppCompatActivity() {
     private var isInDownPosition = false
     private var lastRepTime = 0L
     private val MIN_REP_INTERVAL = 600L  // Reduced to 600ms for faster exercises
+    private val repHistory = mutableListOf<RepData>()
 
     // Hysteresis thresholds - Critical for accuracy
     private val DOWN_THRESHOLD = mutableMapOf(
@@ -293,6 +300,18 @@ class CameraActivity : AppCompatActivity() {
             "JUMPING_JACKS" -> detectJumpingJack(pose)
         }
     }
+    
+    private fun showFormFeedback(angle: Double, isGood: Boolean) {
+        runOnUiThread {
+            if (isGood) {
+                tvInstructions.text = "✅ Good form! Keep going"
+                tvInstructions.setTextColor(android.graphics.Color.GREEN)
+            } else {
+                tvInstructions.text = "⚠️ Go deeper/higher"
+                tvInstructions.setTextColor(android.graphics.Color.YELLOW)
+            }
+        }
+    }
 
     // ====== OPTIMIZED ANGLE SMOOTHING ======
     private fun updateAngleHistory(newAngle: Double): Double {
@@ -408,6 +427,7 @@ class CameraActivity : AppCompatActivity() {
                         isInDownPosition = false
                         lastRepTime = currentTime
                         repCount++
+                        repHistory.add(RepData(currentTime, measurement, 1.0f)) // Add to history
                         consecutiveConfirmedFrames = 0
                         angleHistory.clear()
                         updateRepCount()

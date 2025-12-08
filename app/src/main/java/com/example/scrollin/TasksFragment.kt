@@ -21,12 +21,17 @@ class TasksFragment : Fragment() {
         pointsManager = PointsManager(requireContext())
         
         val rvTasks = view.findViewById<RecyclerView>(R.id.rvTasks)
-        goalAdapter = EnhancedGoalAdapter(pointsManager.getGoals()) { goal, isChecked ->
-            if (isChecked) {
-                // Handle task completion with timer validation
-                handleTaskCompletion(goal)
+        goalAdapter = EnhancedGoalAdapter(pointsManager.getGoals(), 
+            { goal, isChecked ->
+                if (isChecked) {
+                    // Handle task completion with timer validation
+                    handleTaskCompletion(goal)
+                }
+            },
+            { goal ->
+                handleGoalStarted(goal)
             }
-        }
+        )
         rvTasks.adapter = goalAdapter
         rvTasks.layoutManager = LinearLayoutManager(context)
     }
@@ -38,12 +43,27 @@ class TasksFragment : Fragment() {
             
             if (elapsed >= required) {
                 pointsManager.completeGoal(goal)
+                (activity as? JourneyActivity)?.showCompletionCelebration(goal, goal.points)
             } else {
                 // Task failed - not completed in time
                 // Reset the task
                 val updatedGoal = goal.copy(isInProgress = false, startTime = null)
                 pointsManager.updateGoal(updatedGoal)
             }
+        }
+         goalAdapter.updateGoals(pointsManager.getGoals())
+    }
+
+    private fun handleGoalStarted(goal: JourneyGoal) {
+        val updatedGoal = goal.copy(isInProgress = true, startTime = System.currentTimeMillis())
+        pointsManager.updateGoal(updatedGoal)
+        goalAdapter.updateGoals(pointsManager.getGoals())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(::goalAdapter.isInitialized) {
+            goalAdapter.updateGoals(pointsManager.getGoals())
         }
     }
 }

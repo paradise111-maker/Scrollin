@@ -15,7 +15,9 @@ class PointsManager(private val context: Context) {
     private val gson = Gson()
     private val userLevelManager = UserLevelManager(context)
 
-    companion object {
+    private companion object {
+        const val KEY_MORNING_ACTIVITIES = "morning_activities_count"
+        const val KEY_NIGHT_ACTIVITIES = "night_activities_count"
         private const val KEY_TOTAL_POINTS = "total_points"
         private const val KEY_WEEKLY_POINTS = "weekly_points"
         private const val KEY_WEEK_START = "week_start"
@@ -44,12 +46,26 @@ class PointsManager(private val context: Context) {
             category = goal.category
         )
 
-        addPoints(earnedPoints, goal.category)
+        addPoints(earnedPoints, goal.category, goal.type)
         updateGoal(goal.copy(isCompleted = true, completedAt = System.currentTimeMillis()))
         return earnedPoints
     }
+    
+    fun trackActivityCompletion(activityType: GoalType) {
+        when (activityType) {
+            GoalType.MORNING -> {
+                val count = prefs.getInt(KEY_MORNING_ACTIVITIES, 0)
+                prefs.edit().putInt(KEY_MORNING_ACTIVITIES, count + 1).apply()
+            }
+            GoalType.NIGHT -> {
+                val count = prefs.getInt(KEY_NIGHT_ACTIVITIES, 0)
+                prefs.edit().putInt(KEY_NIGHT_ACTIVITIES, count + 1).apply()
+            }
+            else -> {}
+        }
+    }
 
-    fun addPoints(points: Int, category: Category) {
+    fun addPoints(points: Int, category: Category, activityType: GoalType = GoalType.GENERAL) {
         val oldTotal = getTotalPoints()
         val newTotal = oldTotal + points
         prefs.edit().putInt(KEY_TOTAL_POINTS, newTotal).apply()
@@ -64,6 +80,18 @@ class PointsManager(private val context: Context) {
 
         prefs.edit().putString(KEY_LAST_COMPLETED_CATEGORY, category.name).apply()
 
+        trackActivityCompletion(activityType)
+        
+        // Track category-specific counts
+        if (category == Category.MENTAL) {
+            // Assume meditation/mental activities
+            val currentMinutes = getTotalMeditationMinutes()
+            prefs.edit().putInt(KEY_TOTAL_MEDITATION_MINUTES, currentMinutes + 5).apply()
+        } else if (category == Category.PHYSICAL) {
+            val currentExercises = getTotalExercisesCompleted()
+            prefs.edit().putInt(KEY_TOTAL_EXERCISES_COMPLETED, currentExercises + 1).apply()
+        }
+
         updateStreak()
         checkAndUnlockBadges()
         checkMilestones(oldTotal, newTotal)
@@ -77,19 +105,19 @@ class PointsManager(private val context: Context) {
                 when (val reward = milestone.reward) {
                     is Reward.UnlockActivity -> {
                         // Logic to unlock activity
-                        Toast.makeText(context, "New Activity Unlocked: ${reward.activityName}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "New Activity Unlocked: ${"$"}{reward.activityName}", Toast.LENGTH_LONG).show()
                     }
                     is Reward.UnlockBadge -> {
                         unlockBadge(reward.badge)
-                        Toast.makeText(context, "New Badge Unlocked: ${reward.badge.name}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "New Badge Unlocked: ${"$"}{reward.badge.name}", Toast.LENGTH_LONG).show()
                     }
                     is Reward.BonusMinutes -> {
                         // Logic to add bonus minutes
-                        Toast.makeText(context, "You earned ${reward.minutes} bonus minutes!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "You earned ${"$"}{reward.minutes} bonus minutes!", Toast.LENGTH_LONG).show()
                     }
                     is Reward.UnlockTheme -> {
                         // Logic to unlock theme
-                        Toast.makeText(context, "New Theme Unlocked: ${reward.themeName}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "New Theme Unlocked: ${"$"}{reward.themeName}", Toast.LENGTH_LONG).show()
                     }
                 }
                 prefs.edit().putInt(KEY_LAST_MILESTONE_INDEX, index).apply()
@@ -126,19 +154,50 @@ class PointsManager(private val context: Context) {
     }
 
     private fun checkBadgeCondition(badge: JourneyBadge): Boolean {
+        val stats = getStatistics()
+        val totalPoints = stats["total_points"] as? Int ?: 0
+        val currentStreak = stats["current_streak"] as? Int ?: 0
+        val tasksCompleted = getTotalGoalsCompleted()
+        val meditationMinutes = getTotalMeditationMinutes()
+        val exercisesCompleted = getTotalExercisesCompleted()
+        
         return when (badge.name) {
-            "First Steps" -> true
-            "Hot Streak" -> getCurrentStreak() >= 3
-            "7-Day Streak" -> getCurrentStreak() >= 7
-            "Taskmaster" -> getTotalGoalsCompleted() >= 10
-            "Goal-Getter" -> getTotalGoalsCompleted() >= 50
-            "Zen Novice" -> getTotalMeditationMinutes() >= 60
-            "Zen Master" -> getTotalMeditationMinutes() >= 600
-            "Fitness Fiend" -> getTotalExercisesCompleted() >= 25
-            "Workout Warrior" -> getTotalExercisesCompleted() >= 100
+            "First Steps" -> tasksCompleted >= 1
+            "Getting Started" -> totalPoints >= 50
+            "Hot Streak" -> currentStreak >= 3
+            "Week Warrior" -> currentStreak >= 7
+            "Fortnight Fighter" -> currentStreak >= 14
+            "Monthly Master" -> currentStreak >= 30
+            "Task Beginner" -> tasksCompleted >= 5
+            "Taskmaster" -> tasksCompleted >= 25
+            "Goal-Getter" -> tasksCompleted >= 50
+            "Century Club" -> tasksCompleted >= 100
+            "Mindful Beginner" -> meditationMinutes >= 30
+            "Zen Novice" -> meditationMinutes >= 60
+            "Meditation Master" -> meditationMinutes >= 300
+            "Zen Legend" -> meditationMinutes >= 600
+            "Fitness Starter" -> exercisesCompleted >= 10
+            "Fitness Fiend" -> exercisesCompleted >= 50
+            "Workout Warrior" -> exercisesCompleted >= 100
+            "Fitness Legend" -> exercisesCompleted >= 250
+            "Early Bird" -> getMorningActivitiesCount() >= 20
+            "Night Owl" -> getNightActivitiesCount() >= 20
+            "Point Collector" -> totalPoints >= 250
+            "Point Master" -> totalPoints >= 500
+            "Point Champion" -> totalPoints >= 1000
+            "Scrollin Legend" -> totalPoints >= 1000 && userLevelManager.getCurrentLevel().level >= 5
             else -> false
         }
     }
+
+    private fun getMorningActivitiesCount(): Int {
+        return prefs.getInt(KEY_MORNING_ACTIVITIES, 0)
+    }
+
+    private fun getNightActivitiesCount(): Int {
+        return prefs.getInt(KEY_NIGHT_ACTIVITIES, 0)
+    }
+
 
     private fun unlockBadge(badge: JourneyBadge) {
         prefs.edit().putBoolean(KEY_UNLOCKED_BADGES_PREFIX + badge.name, true).apply()

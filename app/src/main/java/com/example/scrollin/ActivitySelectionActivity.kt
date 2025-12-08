@@ -25,6 +25,9 @@ class ActivitySelectionActivity : AppCompatActivity() {
 
     private var selectedActivityPoints: Int = 0
     private var selectedActivityCategory: Category = Category.GENERAL
+    private var selectedActivityTitle: String = ""
+    private var selectedGoalId: String? = null
+    private var selectedGoalType: GoalType = GoalType.GENERAL
     private var timer: CountDownTimer? = null
     private var isActivityRunning = false
     private var isActivityCompleted = false
@@ -34,16 +37,16 @@ class ActivitySelectionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_selection)
 
         pointsManager = PointsManager(this)
-        val activityType = intent.getStringExtra("ACTIVITY_TYPE") ?: determineActivityType()
+        val activityTypeString = intent.getStringExtra("ACTIVITY_TYPE") ?: determineActivityType()
+        selectedGoalType = if (activityTypeString == "MORNING") GoalType.MORNING else if (activityTypeString == "NIGHT") GoalType.NIGHT else GoalType.GENERAL
 
-        // Initialize views from XML
         tvTitle = findViewById(R.id.tvTitle)
         gridActivities = findViewById(R.id.gridActivities)
         tvTimer = findViewById(R.id.tvTimer)
         btnComplete = findViewById(R.id.btnComplete)
         fabAddTask = findViewById(R.id.fabAddTask)
 
-        setupActivities(activityType)
+        setupActivities(activityTypeString)
 
         btnComplete.setOnClickListener {
             if (isActivityCompleted) {
@@ -69,7 +72,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun setupActivities(type: String) {
-        gridActivities.removeAllViews() // Clear previous activities
+        gridActivities.removeAllViews()
 
         when (type) {
             "MORNING" -> {
@@ -90,7 +93,7 @@ class ActivitySelectionActivity : AppCompatActivity() {
             }
             else -> {
                 tvTitle.text = "✨ Anytime Activities"
-                 addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
+                addActivityToGrid("🧘‍♂️", "Meditation", "5-30 min | 10-40 pts", Category.MENTAL, 0, false)
                 addActivityToGrid("💪", "Quick Exercise", "5 reps | 5 pts", Category.PHYSICAL, 5, true)
                 addActivityToGrid("📚", "Reading", "10 minutes | 15 pts", Category.PRODUCTIVITY, 0, false)
             }
@@ -132,7 +135,11 @@ class ActivitySelectionActivity : AppCompatActivity() {
             return
         }
 
-        this.selectedActivityCategory = category
+        selectedActivityTitle = title
+        selectedActivityPoints = points
+        selectedActivityCategory = category
+
+        findAndUpdateMatchingGoal(title, category)
 
         when (title) {
             "Complete a Task" -> startTimerActivity(title, 10, 30, category)
@@ -142,7 +149,6 @@ class ActivitySelectionActivity : AppCompatActivity() {
             "Journaling" -> showJournalingDialog(category)
             "Socialize" -> showSocializeDialog(category)
             else -> {
-                selectedActivityPoints = points
                 if (requiresCamera) {
                     val intent = Intent(this, CameraActivity::class.java)
                     intent.putExtra("ACTIVITY_TYPE", title)
@@ -154,6 +160,21 @@ class ActivitySelectionActivity : AppCompatActivity() {
                     startTimerActivity(title, points, null, category)
                 }
             }
+        }
+    }
+
+    private fun findAndUpdateMatchingGoal(activityTitle: String, category: Category) {
+        val goals = pointsManager.getGoals()
+        val matchingGoal = goals.find { goal ->
+            !goal.isCompleted && goal.category == category &&
+                    (goal.title.contains(activityTitle, ignoreCase = true) ||
+                    activityTitle.contains(goal.title.split(" ").firstOrNull() ?: "", ignoreCase = true))
+        }
+        
+        matchingGoal?.let {
+            selectedGoalId = it.id
+            val updatedGoal = it.copy(isInProgress = true, startTime = System.currentTimeMillis())
+            pointsManager.updateGoal(updatedGoal)
         }
     }
 
@@ -222,36 +243,35 @@ class ActivitySelectionActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun startTimerActivity(title: String, points: Int, duration: Long? = null, category: Category) {
+    private fun startTimerActivity(title: String, points: Int, duration: Long?, category: Category) {
         isActivityRunning = true
         isActivityCompleted = false
 
-        val durationSeconds = duration ?: when {
-            title.contains("3 minutes") -> 180L
-            title.contains("5 minutes") -> 300L
-            title.contains("10 minutes") -> 600L
-            else -> 120L // Default to 2 minutes
-        }
+        val durationSeconds = duration ?: 120L
         
         selectedActivityPoints = points
         selectedActivityCategory = category
 
-        tvTimer.text = "Activity: $title\nTime remaining: ${formatTime(durationSeconds)}"
+        tvTimer.text = """Activity: $title
+Time remaining: ${formatTime(durationSeconds)}"""
         btnComplete.isEnabled = false
         btnComplete.alpha = 0.5f
 
         for (i in 0 until gridActivities.childCount) {
-            (gridActivities.getChildAt(i) as? LinearLayout)?.getChildAt(0)?.alpha = 0.5f
+            (gridActivities.getChildAt(i) as? LinearLayout)?.alpha = 0.5f
         }
 
         timer = object : CountDownTimer(durationSeconds * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                tvTimer.text = "Activity: $title\nTime: ${formatTime(millisUntilFinished / 1000)}"
+                tvTimer.text = """Activity: $title
+Time: ${formatTime(millisUntilFinished / 1000)}"""
             }
 
             override fun onFinish() {
                 isActivityCompleted = true
-                tvTimer.text = "✅ Activity Complete!\n\nYou earned $selectedActivityPoints points!"
+                tvTimer.text = """✅ Activity Complete!
+
+You earned $selectedActivityPoints points!"""
                 btnComplete.isEnabled = true
                 btnComplete.alpha = 1.0f
                 Toast.makeText(this@ActivitySelectionActivity, "🎉 Great job!", Toast.LENGTH_LONG).show()
@@ -266,25 +286,18 @@ class ActivitySelectionActivity : AppCompatActivity() {
     }
 
     private fun completeActivity() {
-        pointsManager.addPoints(selectedActivityPoints, selectedActivityCategory)
-        
-        // Mark corresponding journey goal as complete
-        val goals = pointsManager.getGoals()
-        val matchingGoal = goals.find { goal ->
-            !goal.isCompleted && 
-            goal.category == selectedActivityCategory &&
-            goal.estimatedTime != null
+        selectedGoalId?.let { goalId ->
+            val goal = pointsManager.getGoals().find { it.id == goalId }
+            goal?.let {
+                pointsManager.completeGoal(it)
+                Toast.makeText(this, "🎉 Journey Task '${it.title}' completed!", Toast.LENGTH_LONG).show()
+            }
+        } ?: run {
+            pointsManager.addPoints(selectedActivityPoints, selectedActivityCategory, selectedGoalType)
+            Toast.makeText(this, "🎉 +$selectedActivityPoints points earned!", Toast.LENGTH_LONG).show()
         }
         
-        matchingGoal?.let { goal ->
-            pointsManager.completeGoal(goal)
-        }
-        
-        Toast.makeText(this, "🎉 +$selectedActivityPoints points earned!", Toast.LENGTH_LONG).show()
-        
-        btnComplete.postDelayed({
-            finish() 
-        }, 1000)
+        btnComplete.postDelayed({ finish() }, 1000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -292,8 +305,18 @@ class ActivitySelectionActivity : AppCompatActivity() {
         
         if (requestCode == 100 && resultCode == RESULT_OK) {
             val points = data?.getIntExtra("POINTS_EARNED", 0) ?: 0
-            pointsManager.addPoints(points, selectedActivityCategory)
-            Toast.makeText(this, "🎉 +$points points earned!", Toast.LENGTH_SHORT).show()
+            
+            selectedGoalId?.let { goalId ->
+                val goal = pointsManager.getGoals().find { it.id == goalId }
+                goal?.let {
+                    pointsManager.completeGoal(it)
+                    Toast.makeText(this, "🎉 Journey Task '${it.title}' completed!", Toast.LENGTH_LONG).show()
+                }
+            } ?: run {
+                pointsManager.addPoints(points, selectedActivityCategory, selectedGoalType)
+                 Toast.makeText(this, "🎉 +$points points earned!", Toast.LENGTH_SHORT).show()
+            }
+
             finish()
         }
     }

@@ -12,12 +12,20 @@
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/fragment_tasks.xml"
     },
     {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_weekend_timer_overlay.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/weekend_timer_overlay.xml"
+    },
+    {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/color_bottom_nav_color.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/color/bottom_nav_color.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_expandable_layout.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/expandable_layout.xml"
+    },
+    {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_settings_redesigned.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_settings_redesigned.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_bg_cred_card.xml.flat",
@@ -56,6 +64,10 @@
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_settings.xml"
     },
     {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_bg_weekend_timer.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/bg_weekend_timer.xml"
+    },
+    {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_selection.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_selection.xml"
     },
@@ -86,10 +98,6 @@
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_profile.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/ic_profile.xml"
-    },
-    {
-        "merged": "com.example.scrollin.app-debug-47:/layout_activity_journey_enhanced.xml.flat",
-        "source": "com.example.scrollin.app-main-49:/layout/activity_journey_enhanced.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/xml_data_extraction_rules.xml.flat",
@@ -124,12 +132,12 @@
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_perk_card.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_add_task.xml.flat",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_add_task.xml"
-    },
-    {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_settings.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_add_task.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_add_task.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_arrow_forward_purple.xml.flat",
@@ -144,16 +152,16 @@
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_badge_enhanced.xml"
     },
     {
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_perks.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/ic_perks.xml"
+    },
+    {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_fragment_badges.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/fragment_badges.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_fragment_progress.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/fragment_progress.xml"
-    },
-    {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_perks.xml.flat",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/ic_perks.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_launcher_background.xml.flat",
@@ -176,20 +184,20 @@
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/bg_chart_fill.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_expand_less.xml.flat",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/drawable/ic_expand_less.xml"
+        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_item_badge.xml.flat",
+        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_badge.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_journey_enhanced.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_journey_enhanced.xml"
     },
     {
-        "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_item_badge.xml.flat",
-        "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/item_badge.xml"
-    },
-    {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/layout_activity_perks.xml.flat",
         "source": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-main-49:/layout/activity_perks.xml"
+    },
+    {
+        "merged": "com.example.scrollin.app-debug-47:/drawable_ic_expand_more.xml.flat",
+        "source": "com.example.scrollin.app-main-49:/drawable/ic_expand_more.xml"
     },
     {
         "merged": "/Users/bhavyamaheshwari/.gradle/daemon/9.0-milestone-1/com.example.scrollin.app-debug-47:/drawable_ic_add.xml.flat",
